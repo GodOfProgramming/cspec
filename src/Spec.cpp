@@ -51,8 +51,11 @@ void RunFunc(std::function<void(void)> func) {
 }
 
 void Describe(const char* desc, std::function<void(void)> func) {
+  printf("HERE1\n"); fflush(stdout);
   gTestDescStack.clear();
+  printf("HERE2\n"); fflush(stdout);
   gTestDescStack.push(desc);
+  printf("HERE3\n"); fflush(stdout);
 
   try {
     RunFunc(func);

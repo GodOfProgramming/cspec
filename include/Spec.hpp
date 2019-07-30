@@ -5,8 +5,11 @@
 #include <sstream>
 #include <queue>
 #include <vector>
+#include <stdio.h>
 
-#define BeginTest(TestName) const auto TestName = []() -> int {
+#define BeginTest(TestName) const auto TestName = []() -> int { \
+  printf("%s:(%d)\n", __FILE__, __LINE__); fflush(stdout);
+
 #define EndTest() return 0; }();
 
 extern bool gInItBlock;
