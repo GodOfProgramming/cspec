@@ -41,7 +41,7 @@ Expectation<T> Expect(T expectation) {
   if (!gInItBlock) {
     throw InvalidExpectationException();
   }
-  return Expectation(expectation);
+  return Expectation<T>(expectation);
 }
 
 void Describe(const char* desc, std::function<void(void)> func);
@@ -51,8 +51,6 @@ void It(const char* test, std::function<void(void)> func);
 class Spec {
   public:
     static void RunTests();
-
-    static const std::vector<std::string> ARGV;
 
   private:
     static std::queue<std::function<void(void)>> mTests;

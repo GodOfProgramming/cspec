@@ -34,13 +34,12 @@ class CustomVector {
     size_t mInternalPtr = 0;
 };
 
-CustomVector<const char*> gTestDescStack;
+static CustomVector<const char*> gTestDescStack;
 
-const std::vector<std::string> Spec::ARGV;
 std::queue<std::function<void(void)>> Spec::mTests;
 
 bool gInItBlock = false;
-bool gAllPassed = true;
+static bool gAllPassed = true;
 
 void RunFunc(std::function<void(void)> func) {
   try {
@@ -90,11 +89,6 @@ void Spec::RunTests() {
 }
 
 int main(int argc, char* argv[]) {
-  auto& args = const_cast<std::vector<std::string>&>(Spec::ARGV);
-  for (int i = 0; i < argc; i++) {
-    args.push_back(std::string(argv[i]));
-  }
-
   Spec::RunTests();
   return gAllPassed ? 0 : 1;
 }

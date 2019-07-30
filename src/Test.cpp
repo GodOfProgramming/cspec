@@ -1,4 +1,5 @@
 #include "Spec.hpp"
+#include "stdio.h"
 
 BeginTest(Spec_Example_Test)
 Describe("A description", []() -> void {
