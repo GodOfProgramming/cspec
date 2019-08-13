@@ -1,16 +1,18 @@
 #pragma once
 #include <vector>
+#include <iostream>
 
 /* Vector that behaves like a stack but can be iterated */
 template <typename T>
 class CustomVector {
   public:
     void push(T val) {
-      if (mInternal.size() < mInternalPtr) {
-	mInternal.resize(mInternal.size() * 1.4);
+      if (mInternalPtr < mInternal.size()) {
+	mInternal[mInternalPtr] = val;
+      } else {
+	mInternal.push_back(val);
       }
-
-      mInternal[mInternalPtr++] = val;
+      mInternalPtr++;
     }
 
     T pop() {

@@ -1,7 +1,7 @@
 #include "Spec.hpp"
 #include "stdio.h"
 
-BeginTest(Spec_Example_Test)
+Begin(Spec_Example_Test)
 Describe("A description", []() -> void {
     Context("A Context", []() -> void {
 	It("Does something", []() -> void {
@@ -10,4 +10,4 @@ Describe("A description", []() -> void {
 	});
     });
 });
-EndTest()
+End()

@@ -9,10 +9,14 @@
 
 #include "Expectation.hpp"
 
-#define BeginTest(TestName) const auto TestName = []() -> int { \
-  printf("%s:(%d)\n", __FILE__, __LINE__); fflush(stdout);
+#define Begin(test_name)			\
+  int func_##test_name();			\
+  int var_##test_name = func_##test_name();	\
+  int func_##test_name() {
 
-#define EndTest() return 0; }();
+#define End()	\
+    return 0;	\
+  }
 
 void Describe(const char* desc, std::function<void(void)> func);
 void Context(const char* context, std::function<void(void)> func);
