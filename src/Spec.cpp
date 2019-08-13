@@ -16,15 +16,6 @@ void RunFunc(std::function<void(void)> func) {
   } catch (InvalidExpectationException e) {
     std::cout << "Expectations can only be executed within it blocks" << std::endl;
     gAllPassed = false;
-  }
-}
-
-void Describe(const char* desc, std::function<void(void)> func) {
-  gTestDescStack.clear();
-  gTestDescStack.push(desc);
-
-  try {
-    RunFunc(func);
   } catch (SpecFailureException e) {
     gAllPassed = false;
     int tabcount = 1;
@@ -36,6 +27,11 @@ void Describe(const char* desc, std::function<void(void)> func) {
       tabcount++;
     }
   }
+}
+
+void Describe(const char* desc, std::function<void(void)> func) {
+  gTestDescStack.clear();
+  Context(desc, func);
 }
 
 void Context(const char* context, std::function<void(void)> func) {
