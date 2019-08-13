@@ -18,9 +18,13 @@
     return 0;	\
   }
 
-void Describe(const char* desc, std::function<void(void)> func);
-void Context(const char* context, std::function<void(void)> func);
-void It(const char* test, std::function<void(void)> func);
+#define Describe(desc, func) _Describe_(desc, func)
+#define Context(context, func) _Context_(context, func)
+#define It(test, func) _It_(test, func, __FILE__, __LINE__)
+
+void _Describe_(const char* desc, std::function<void(void)> func);
+void _Context_(const char* context, std::function<void(void)> func);
+void _It_(const char* test, std::function<void(void)> func, const char* file, int line);
 
 class Spec {
   public:
@@ -29,3 +33,5 @@ class Spec {
   private:
     static std::queue<std::function<void(void)>> mTests;
 };
+
+
