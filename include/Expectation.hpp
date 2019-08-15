@@ -1,5 +1,6 @@
 #pragma once
 #include <iomanip>
+#include "console.hpp"
 #include "Exceptions.hpp"
 
 extern bool gInItBlock;
@@ -13,15 +14,14 @@ class Expectation {
     template <typename U>
     void toEqual(U value) {
       toEqual(value, 
-	  "Expectation Failed:\n", 
-	  "\tExpected: ", mExpectation, ",\n",
-	  "\tGot:      ", value, '\n');
+	  "Expectation Failed -> ", "Expected: ", mExpectation, ",\n",
+	  "                      ", "Got:      ", value, '\n');
     }
 
     template <typename U, typename... Args>
     void toEqual(U value, Args&& ...args) {
       if (mExpectation != value) {
-        ((std::cout << std::forward<Args>(args)), ...);
+	(console.write(std::forward<Args>(args)), ...);
 	gItFailed = true;
       }
     }

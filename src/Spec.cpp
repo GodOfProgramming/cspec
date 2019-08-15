@@ -4,6 +4,8 @@
 #include "CustomVector.hpp"
 #include "Exceptions.hpp"
 
+#define TAB_STR "  "
+
 static CustomVector<const char*> gTestDescStack;
 
 std::queue<std::function<void(void)>> Spec::mTests;
@@ -43,11 +45,12 @@ void _It_(const char* test, std::function<void(void)> func, const char* file, in
     console.write("Failure at: ", console.setOpt(Console::ForgroundColor::Red), file, console.setOpt(Console::ForgroundColor::Yellow),'(', line, ')', '\n');
     for (const auto& desc : gTestDescStack) {
       for (int i = 0; i < tabcount; i++) {
-	std::cout << '\t';
+	console.write(TAB_STR);
       }
-      std::cout << desc << '\n';
+      console.write(desc, '\n');
       tabcount++;
     }
+    console.write('\n');
   }
 }
 
