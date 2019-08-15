@@ -1,8 +1,13 @@
+#include <iostream>
+#include <exception>
+#include <sstream>
+#include <vector>
+#include <stdio.h>
 #include "console.hpp"
-#include "Spec.hpp"
-#include "Expectation.hpp"
-#include "CustomVector.hpp"
-#include "Exceptions.hpp"
+#include "spec.hpp"
+#include "expectation.hpp"
+#include "custom_vector.hpp"
+#include "exceptions.hpp"
 
 #define TAB_STR "  "
 
@@ -30,6 +35,7 @@ void _Describe_(const char* desc, std::function<void(void)> func) {
 void _Context_(const char* context, std::function<void(void)> func) {
   gTestDescStack.push(context);
   RunFunc(func);
+  gTestDescStack.pop();
 }
 
 void _It_(const char* test, std::function<void(void)> func, const char* file, int line) {
@@ -52,6 +58,8 @@ void _It_(const char* test, std::function<void(void)> func, const char* file, in
     }
     console.write('\n');
   }
+
+  gTestDescStack.pop();
 }
 
 void Spec::RunTests() {

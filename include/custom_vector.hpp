@@ -24,7 +24,7 @@ class CustomVector {
     }
 
     auto end() {
-      return mInternal.end();
+      return mInternal.begin() + (mInternalPtr >= 0 ? mInternalPtr : 0);
     }
 
     void clear() {

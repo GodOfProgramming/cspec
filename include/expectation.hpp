@@ -1,25 +1,29 @@
 #pragma once
 #include <iomanip>
 #include "console.hpp"
-#include "Exceptions.hpp"
+#include "exceptions.hpp"
 
 extern bool gInItBlock;
 extern bool gItFailed;
 
-template <typename T>
+template <typename E>
 class Expectation {
   public:
-    Expectation(T expectation) : mExpectation(expectation) {}
+    Expectation(E expectation) : mExpectation(expectation) {}
 
-    template <typename U>
-    void toEqual(U value) {
+    template <typename V>
+    void toEqual(V value) {
       toEqual(value, 
-	  "Expectation Failed -> ", "Expected: ", mExpectation, ",\n",
-	  "                      ", "Got:      ", value, '\n');
+	"Expectation Failed\n  ", 
+	"Expected ", 
+	mExpectation, 
+	" to equal ", 
+	value, '\n', '\n'
+      );
     }
 
-    template <typename U, typename... Args>
-    void toEqual(U value, Args&& ...args) {
+    template <typename V, typename... Args>
+    void toEqual(V value, Args&& ...args) {
       if (mExpectation != value) {
 	(console.write(std::forward<Args>(args)), ...);
 	gItFailed = true;
@@ -27,7 +31,7 @@ class Expectation {
     }
 
   private:
-    T mExpectation;
+    E mExpectation;
 };
 
 template <typename T>
