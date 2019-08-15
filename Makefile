@@ -6,11 +6,14 @@ SRC		:= src
 INCLUDE		:= include
 LIB		:= lib
 
+MYLIB		:= $(ONEOFFS_REPO)/c++/tools
+
 LIBRARIES	:=
+STATIC_LIBS	:= libconsole.a
 EXECUTABLE	:= spec 
 
 $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
-	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -I$(MYLIB) $^ -L$(LIB) $(STATIC_LIBS) -o $@ $(LIBRARIES)
 
 clean:
 	-rm $(BIN)/*

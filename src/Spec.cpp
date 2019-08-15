@@ -1,3 +1,4 @@
+#include "console.hpp"
 #include "Spec.hpp"
 #include "Expectation.hpp"
 #include "CustomVector.hpp"
@@ -39,7 +40,7 @@ void _It_(const char* test, std::function<void(void)> func, const char* file, in
     gItFailed = false;
     gAllPassed = false;
     int tabcount = 1;
-    std::cout << "Failure at: " << file << '(' << line << ')' << '\n';
+    console.write("Failure at: ", console.setOpt(Console::ForgroundColor::Red), file, console.setOpt(Console::ForgroundColor::Yellow),'(', line, ')', '\n');
     for (const auto& desc : gTestDescStack) {
       for (int i = 0; i < tabcount; i++) {
 	std::cout << '\t';
