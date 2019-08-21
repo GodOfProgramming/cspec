@@ -1,9 +1,10 @@
 #pragma once
-#include "test.hpp"
+#include "test_block.hpp"
 
-namespace cspec : public Test {
-  class it {
-    it(const char* name, std::function<void(void)> test);
+namespace cspec  {
+  class ItBlock : public TestBlock {
+    public:
+      ItBlock(const char* name, TestFunc test);
   };
 }
 

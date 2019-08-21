@@ -1,6 +1,9 @@
 #pragma once
+#include "test_block.hpp"
 
-class Describe {
-  public:
-  private:
-};
+namespace cspec {
+  class DescribeBlock : public TestBlock {
+    public:
+      DescribeBlock(const char* name, TestFunc test); 
+  };
+}

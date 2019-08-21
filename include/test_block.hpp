@@ -4,9 +4,9 @@
 namespace cspec {
   typedef std::function<void(void)> TestFunc;
 
-  class Test {
+  class TestBlock {
     public:
-      Test(const char* name, TestFunc test);
+      TestBlock(const char* name, TestFunc test);
 
       void operator()();
 

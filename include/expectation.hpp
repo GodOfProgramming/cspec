@@ -3,42 +3,46 @@
 #include "console.hpp"
 #include "exceptions.hpp"
 
-extern bool gInItBlock;
-extern bool gItFailed;
+#define Expect(expectation) cspec::_Expect_(expectation)
 
-template <typename E>
-class Expectation {
-  public:
-    Expectation(E expectation) : mExpectation(expectation) {}
+namespace cspec {
+  extern bool gInItBlock;
+  extern bool gItFailed;
 
-    template <typename V>
-    void toEqual(V value) {
-      toEqual(value, 
-	"Expectation Failed\n  ", 
-	"Expected ", 
-	mExpectation, 
-	" to equal ", 
-	value, '\n', '\n'
-      );
-    }
+  template <typename E>
+  class Expectation {
+    public:
+      Expectation(E expectation) : mExpectation(expectation) {}
 
-    template <typename V, typename... Args>
-    void toEqual(V value, Args&& ...args) {
-      if (mExpectation != value) {
-	(console.write(std::forward<Args>(args)), ...);
-	gItFailed = true;
+      template <typename V>
+      void toEqual(V value) {
+	toEqual(value, 
+	  "Expectation Failed\n  ", 
+	  "Expected ", 
+	  mExpectation, 
+	  " to equal ", 
+	  value, '\n', '\n'
+	);
       }
+
+      template <typename V, typename... Args>
+      void toEqual(V value, Args&& ...args) {
+	if (mExpectation != value) {
+	  (console.write(std::forward<Args>(args)), ...);
+	  gItFailed = true;
+	}
+      }
+
+    private:
+      E mExpectation;
+  };
+
+  template <typename T>
+  Expectation<T> _Expect_(T expectation) {
+    if (!gInItBlock) {
+      throw InvalidExpectationException();
     }
-
-  private:
-    E mExpectation;
-};
-
-template <typename T>
-Expectation<T> Expect(T expectation) {
-  if (!gInItBlock) {
-    throw InvalidExpectationException();
+    return Expectation<T>(expectation);
   }
-  return Expectation<T>(expectation);
 }
 

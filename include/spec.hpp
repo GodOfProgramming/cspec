@@ -9,20 +9,21 @@
 /* Return 0 and execute the lambda */
 #define EndSpec return 0; }();
 
-#define Describe(desc, func) _Describe_(desc, func)
-#define Context(context, func) _Context_(context, func)
-#define It(test, func) _It_(test, func, __FILE__, __LINE__)
+#define Describe(desc, func) cspec::_Describe_(desc, func)
+#define Context(context, func) cspec::_Context_(context, func)
+#define It(test, func) cspec::_It_(test, func, __FILE__, __LINE__)
 
-void _Describe_(const char* desc, std::function<void(void)> func);
-void _Context_(const char* context, std::function<void(void)> func);
-void _It_(const char* test, std::function<void(void)> func, const char* file, int line);
+namespace cspec {
+  void _Describe_(const char* desc, std::function<void(void)> func);
+  void _Context_(const char* context, std::function<void(void)> func);
+  void _It_(const char* test, std::function<void(void)> func, const char* file, int line);
 
+  class SpecRunner {
+    public:
+      static void RunTests();
 
-class Spec {
-  public:
-    static void RunTests();
-
-  private:
-    static std::queue<std::function<void(void)>> mTests;
-};
+    private:
+      static std::queue<std::function<void(void)>> mTests;
+  };
+}
 

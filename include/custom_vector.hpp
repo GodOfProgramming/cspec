@@ -2,36 +2,39 @@
 #include <vector>
 #include <iostream>
 
-/* Vector that behaves like a stack but can be iterated */
-template <typename T>
-class CustomVector {
-  public:
-    void push(T val) {
-      if (mInternalPtr < mInternal.size()) {
-	mInternal[mInternalPtr] = val;
-      } else {
-	mInternal.push_back(val);
+namespace cspec {
+  /* Vector that behaves like a stack but can be iterated */
+  template <typename T>
+  class CustomVector {
+    public:
+      void push(T val) {
+	if (mInternalPtr < mInternal.size()) {
+	  mInternal[mInternalPtr] = val;
+	} else {
+	  mInternal.push_back(val);
+	}
+	mInternalPtr++;
       }
-      mInternalPtr++;
-    }
 
-    T pop() {
-      return mInternal[mInternalPtr >= 0 ? mInternalPtr-- : 0];
-    }
+      T pop() {
+	return mInternal[mInternalPtr >= 0 ? mInternalPtr-- : 0];
+      }
 
-    auto begin() {
-      return mInternal.begin();
-    }
+      auto begin() {
+	return mInternal.begin();
+      }
 
-    auto end() {
-      return mInternal.begin() + (mInternalPtr >= 0 ? mInternalPtr : 0);
-    }
+      auto end() {
+	return mInternal.begin() + (mInternalPtr >= 0 ? mInternalPtr : 0);
+      }
 
-    void clear() {
-      mInternal.resize(0);
-    };
+      void clear() {
+	mInternal.resize(0);
+      };
 
-  private:
-    std::vector<T> mInternal;
-    size_t mInternalPtr = 0;
-};
+    private:
+      std::vector<T> mInternal;
+      size_t mInternalPtr = 0;
+  };
+}
+

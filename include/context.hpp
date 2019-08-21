@@ -1,6 +1,9 @@
 #pragma once
+#include "test_block.hpp"
 
-class Context {
-  public:
-  private:
-};
+namespace cspec {
+  class Context : public TestBlock {
+    public:
+      Context(const char* name, TestFunc test);
+  };
+}

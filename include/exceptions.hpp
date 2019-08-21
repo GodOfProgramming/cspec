@@ -1,3 +1,5 @@
 #pragma once
-class InvalidExpectationException { public: InvalidExpectationException() = default; };
+namespace cspec {
+  class InvalidExpectationException { public: InvalidExpectationException() = default; };
+}
 
