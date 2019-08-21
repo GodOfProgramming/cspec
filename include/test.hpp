@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 
 namespace cspec {
   typedef std::function<void(void)> TestFunc;

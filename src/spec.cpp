@@ -22,7 +22,7 @@ void RunFunc(std::function<void(void)> func) {
   try {
     func();
   } catch (InvalidExpectationException e) {
-    std::cout << "Expectations can only be executed within it blocks" << std::endl;
+    console.write("Expectations can only be executed within it blocks", '\n');
     gAllPassed = false;
   }
 }
@@ -48,7 +48,11 @@ void _It_(const char* test, std::function<void(void)> func, const char* file, in
     gItFailed = false;
     gAllPassed = false;
     int tabcount = 1;
-    console.write("Failure at: ", console.setOpt(Console::ForgroundColor::Red), file, console.setOpt(Console::ForgroundColor::Yellow),'(', line, ')', '\n');
+    console.write(
+	"Failure at: ", 
+	console.setOpt<Console::Mod::FG_Red>(), file, 
+	console.setOpt<Console::Mod::FG_Yellow>(), '(', line, ')', '\n'
+      );
     for (const auto& desc : gTestDescStack) {
       for (int i = 0; i < tabcount; i++) {
 	console.write(TAB_STR);
