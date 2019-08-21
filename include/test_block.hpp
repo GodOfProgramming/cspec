@@ -7,6 +7,7 @@ namespace cspec {
   class TestBlock {
     public:
       TestBlock(const char* name, TestFunc test);
+      virtual ~TestBlock() = default;
 
       void operator()();
 
