@@ -32,6 +32,15 @@ namespace cspec {
 	mInternal.resize(0);
       };
 
+      const std::vector<T>& getInternal() const {
+	return mInternal;
+      }
+
+      CustomVector<T>& operator=(const CustomVector& other) {
+	this->mInternal = other.mInternal;
+	return *this;
+      }
+
     private:
       std::vector<T> mInternal;
       size_t mInternalPtr = 0;

@@ -1,5 +1,7 @@
 #pragma once
 #include <functional>
+#include <vector>
+#include "custom_vector.hpp"
 
 namespace cspec {
   typedef std::function<void(void)> TestFunc;
@@ -9,7 +11,9 @@ namespace cspec {
       TestBlock(const char* name, TestFunc test);
       virtual ~TestBlock() = default;
 
-      void operator()();
+      virtual void run();
+
+      TestFunc beforeEach;
 
     private:
       const char* mName;

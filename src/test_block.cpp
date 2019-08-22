@@ -3,7 +3,7 @@
 namespace cspec {
   TestBlock::TestBlock(const char* name, TestFunc test) : mName(name), mTest(test) { }
 
-  void TestBlock::operator()() {
+  void TestBlock::run() {
     mTest();
   }
 }

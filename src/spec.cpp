@@ -8,41 +8,60 @@
 #include "expectation.hpp"
 #include "custom_vector.hpp"
 #include "exceptions.hpp"
+#include "describe_block.hpp"
+#include "context_block.hpp"
+#include "it_block.hpp"
 
 #define TAB_STR "  "
 
 namespace cspec {
   static CustomVector<const char*> gTestDescStack;
+  static CustomVector<TestBlock*> gTests;
 
-  std::queue<std::function<void(void)>> SpecRunner::mTests;
   bool gInItBlock = false;
   bool gItFailed = false;
-  static bool gAllPassed = true;
+  bool gAllPassed = true;
 
-  void RunFunc(std::function<void(void)> func) {
+  TestBlock* gCurrentTest = nullptr;
+
+  void RunTest(TestBlock& test) {
     try {
-      func();
+      test.run();
     } catch (InvalidExpectationException e) {
       console.write("Expectations can only be executed within it blocks", '\n');
       gAllPassed = false;
     }
   }
 
-  void _Describe_(const char* desc, std::function<void(void)> func) {
-    gTestDescStack.clear();
-    Context(desc, func);
-  }
-
-  void _Context_(const char* context, std::function<void(void)> func) {
-    gTestDescStack.push(context);
-    RunFunc(func);
+  void _Describe_(const char* desc, TestFunc func) {
+    gTestDescStack.push(desc);
+    DescribeBlock db(desc, func);
+    gCurrentTest = &db;
+    gTests.push(gCurrentTest);
+    RunTest(db);
+    gTests.pop();
     gTestDescStack.pop();
   }
 
-  void _It_(const char* test, std::function<void(void)> func, const char* file, int line) {
-    gInItBlock = true;
+  void _Context_(const char* context, TestFunc func) {
+    gTestDescStack.push(context);
+    ContextBlock cb(context, func);
+    gCurrentTest = &cb;
+    gTests.push(gCurrentTest);
+    RunTest(cb);
+    gTests.pop();
+    gTestDescStack.pop();
+  }
+
+  void _It_(const char* test, TestFunc func, const char* file, int line) {
     gTestDescStack.push(test);
-    RunFunc(func);
+    gInItBlock = true;
+    ItBlock ib(test, func);
+    ib.PrevTests = gTests;
+    gCurrentTest = &ib;
+    gTests.push(gCurrentTest);
+    RunTest(ib);
+    gTests.pop();
     gInItBlock = false;
 
     if (gItFailed) {
@@ -67,16 +86,11 @@ namespace cspec {
     gTestDescStack.pop();
   }
 
-  void SpecRunner::RunTests() {
-    while(!mTests.empty()) {
-      auto test = mTests.front();
-      test();
-      mTests.pop();
-    }
+  void _BeforeEach_(TestFunc func) {
+    gCurrentTest->beforeEach = func;
   }
 }
 
 int main() {
-  cspec::SpecRunner::RunTests();
   return cspec::gAllPassed ? 0 : 1;
 }
