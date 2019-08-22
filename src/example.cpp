@@ -36,6 +36,10 @@ std::ostream &operator<<(std::ostream &os, const Foobar& f) {
 BeginSpec(spec1)
 
 Describe("Foobar", [] {
+  AfterEach([] {
+    console.write("Ran foobar test", '\n');
+  });
+
   Context("Passing tests", [] {
     It("passes", [] {
       Expect(1).toEqual(1);

@@ -19,7 +19,9 @@ namespace cspec {
 
   bool gInItBlock = false;
   bool gItFailed = false;
-  bool gAllPassed = true;
+
+  unsigned int gSpecCount = 0;
+  unsigned int gFailures = 0;
 
   TestBlock* gCurrentTest = nullptr;
 
@@ -28,7 +30,6 @@ namespace cspec {
       test.run();
     } catch (InvalidExpectationException e) {
       console.write("Expectations can only be executed within it blocks", '\n');
-      gAllPassed = false;
     }
   }
 
@@ -54,37 +55,32 @@ namespace cspec {
 
   void _It_(const char* test, TestFunc func, const char* file, int line) {
     auto prev_test = gCurrentTest;
-    gInItBlock = true;
     ItBlock ib(test, func);
     ib.PrevTests = gTests;
     gCurrentTest = &ib;
     gTests.push(gCurrentTest);
+
+    gInItBlock = true;
     RunTest(ib);
     gInItBlock = false;
 
+    gSpecCount++;
+
     if (gItFailed) {
+      gFailures++;
       gItFailed = false;
-      gAllPassed = false;
-      int tabcount = 1;
       console.write(
 	"Failure at: ", 
 	console.setOpt<Console::Mod::FG_Red>(), file, 
 	console.setOpt<Console::Mod::FG_Yellow>(), '(', line, ')', '\n'
       );
-      for (const auto& test : gTests) {
-	for (int i = 0; i < tabcount; i++) {
-	  console.write(TAB_STR);
-	}
-	console.write(test->Desc, '\n');
-	tabcount++;
-      }
-      console.write('\n');
+      printCurrentTestStack();
     } else {
       console.write(console.setOpt<Console::Mod::FG_Green>(), "\u2022");
     }
 
-    gCurrentTest = prev_test;
     gTests.pop();
+    gCurrentTest = prev_test;
   }
 
   void _BeforeEach_(TestFunc func) {
@@ -92,8 +88,25 @@ namespace cspec {
       gCurrentTest->beforeEach = func;
     }
   }
+
+  void _AfterEach_(TestFunc func) {
+    if (gCurrentTest) {
+      gCurrentTest->afterEach = func;
+    }
+  }
+
+  void printCurrentTestStack() {
+    int tabcount = 1;
+    for (const auto& test : gTests) {
+      for (int i = 0; i < tabcount; i++) { 
+	console.write(TAB_STR); 
+      }
+      console.write(test->Desc, '\n');
+      tabcount++;
+    }
+  }
 }
 
 int main() {
-  return cspec::gAllPassed ? 0 : 1;
+  return !cspec::gFailures ? 0 : 1;
 }

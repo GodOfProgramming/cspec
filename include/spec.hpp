@@ -15,6 +15,7 @@
 #define Context(context, ...) cspec::_Context_(context, __VA_ARGS__)
 #define It(test, ...) cspec::_It_(test, __VA_ARGS__, __FILE__, __LINE__)
 #define BeforeEach(...) cspec::_BeforeEach_(__VA_ARGS__)
+#define AfterEach(...) cspec::_AfterEach_(__VA_ARGS__)
 
 namespace cspec {
   typedef std::shared_ptr<TestBlock> BlockPtr;
@@ -23,6 +24,8 @@ namespace cspec {
   void _Context_(const char* context, TestFunc func);
   void _It_(const char* test, TestFunc func, const char* file, int line);
   void _BeforeEach_(TestFunc func);
+  void _AfterEach_(TestFunc func);
+  void printCurrentTestStack();
 
   class SpecRunner {
     public:

@@ -12,6 +12,12 @@ namespace cspec {
     }
 
     TestBlock::run();
+
+    for(const auto& test : PrevTests) {
+      if (test->afterEach) {
+	test->afterEach();
+      }
+    }
   }
 }
 

@@ -14,6 +14,7 @@ namespace cspec {
       virtual void run();
 
       TestFunc beforeEach;
+      TestFunc afterEach;
 
       const char* const Desc;
       const TestFunc Test;
