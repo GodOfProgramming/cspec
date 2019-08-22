@@ -10,6 +10,10 @@ Describe("A description", [] {
   });
 
   Context("A Context", [] {
+    BeforeEach([] {
+      console.write("In context BE", '\n');
+    });
+
     It("Does something", [] {
       Expect(1).toEqual(1);
       Expect(2).toEqual(3);

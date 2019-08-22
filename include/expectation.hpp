@@ -18,7 +18,8 @@ namespace cspec {
       void toEqual(V value) {
 	toEqual(value,
 	  console.setOpt<Console::Mod::FG_Cyan>(),
-	  "Expectation Failed\n  ", 
+	  "Expectation Failed\n  ",
+	  console.setOpt<Console::Mod::FG_Reset>(),
 	  "Expected ", 
 	  mExpectation, 
 	  " to equal ", 
@@ -29,7 +30,7 @@ namespace cspec {
       template <typename V, typename... Args>
       void toEqual(V value, Args&& ...args) {
 	if (mExpectation != value) {
-	  (console.write(std::forward<Args>(args)), ...);
+	  console.write(args...);
 	  gItFailed = true;
 	}
       }

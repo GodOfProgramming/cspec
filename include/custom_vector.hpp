@@ -38,6 +38,7 @@ namespace cspec {
 
       CustomVector<T>& operator=(const CustomVector& other) {
 	this->mInternal = other.mInternal;
+	this-> mInternalPtr = other.mInternalPtr;
 	return *this;
       }
 

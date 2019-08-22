@@ -1,4 +1,5 @@
 #include "it_block.hpp"
+#include "console.hpp"
 
 namespace cspec {
   ItBlock::ItBlock(const char* name, TestFunc test) : TestBlock(name, test) { }
