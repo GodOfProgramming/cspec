@@ -11,10 +11,10 @@
 /* Return 0 and execute the lambda */
 #define EndSpec return 0; }();
 
-#define Describe(desc, func) cspec::_Describe_(desc, func)
-#define Context(context, func) cspec::_Context_(context, func)
-#define It(test, func) cspec::_It_(test, func, __FILE__, __LINE__)
-#define BeforeEach(func) cspec::_BeforeEach_(func)
+#define Describe(desc, ...) cspec::_Describe_(desc, __VA_ARGS__)
+#define Context(context, ...) cspec::_Context_(context, __VA_ARGS__)
+#define It(test, ...) cspec::_It_(test, __VA_ARGS__, __FILE__, __LINE__)
+#define BeforeEach(...) cspec::_BeforeEach_(__VA_ARGS__)
 
 namespace cspec {
   typedef std::shared_ptr<TestBlock> BlockPtr;

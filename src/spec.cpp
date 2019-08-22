@@ -33,24 +33,27 @@ namespace cspec {
   }
 
   void _Describe_(const char* desc, TestFunc func) {
+    auto prev_test = gCurrentTest;
     DescribeBlock db(desc, func);
     gCurrentTest = &db;
     gTests.push(gCurrentTest);
     RunTest(db);
     gTests.pop();
-    gCurrentTest = nullptr;
+    gCurrentTest = prev_test;
   }
 
   void _Context_(const char* context, TestFunc func) {
+    auto prev_test = gCurrentTest;
     ContextBlock cb(context, func);
     gCurrentTest = &cb;
     gTests.push(gCurrentTest);
     RunTest(cb);
     gTests.pop();
-    gCurrentTest = nullptr;
+    gCurrentTest = prev_test;
   }
 
   void _It_(const char* test, TestFunc func, const char* file, int line) {
+    auto prev_test = gCurrentTest;
     gInItBlock = true;
     ItBlock ib(test, func);
     ib.PrevTests = gTests;
@@ -76,8 +79,11 @@ namespace cspec {
 	tabcount++;
       }
       console.write('\n');
+    } else {
+      console.write(console.setOpt<Console::Mod::FG_Green>(), "\u2022");
     }
 
+    gCurrentTest = prev_test;
     gTests.pop();
   }
 

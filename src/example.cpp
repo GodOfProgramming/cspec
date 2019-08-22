@@ -1,19 +1,69 @@
 #include "console.hpp"
 #include "spec.hpp"
 #include "stdio.h"
+#include "sstream"
+
+class Foobar {
+  public:
+    Foobar(int id) : mId(id) { };
+
+    void change(int id) {
+      this->mId = id;
+    }
+
+    bool operator==(const Foobar& other) {
+      return this->mId == other.mId;
+    }
+
+    bool operator!=(const Foobar& other) {
+      return !(*this == other);
+    }
+
+    std::string toString() const {
+      std::stringstream ss;
+      ss << "Foobar(" << mId << ")";
+      return ss.str();
+    }
+
+  private:
+    int mId;
+};
+
+std::ostream &operator<<(std::ostream &os, const Foobar& f) { 
+  return os << f.toString();
+}
 
 BeginSpec(spec1)
 
-Describe("A description", [] {
-  BeforeEach([] {
-    console.write("In Desc BE", '\n');
-  });
-
-  Context("A Context", [] {
-    BeforeEach([] {
-      console.write("In context BE", '\n');
+Describe("Foobar", [] {
+  Context("Passing tests", [] {
+    It("passes", [] {
+      Expect(1).toEqual(1);
     });
 
+    It("passes", [] {
+      Expect('A').toEqual(65);
+    });
+  });
+
+  Foobar foo(1);
+  Foobar bar(2);
+
+  It("Fails", [&] {
+    Expect(foo).toEqual(bar);
+  });
+
+  BeforeEach([&] {
+    bar.change(1);
+  });
+
+  It("Passes", [&] {
+    Expect(foo).toEqual(bar);
+  });
+});
+
+Describe("A description", [] {
+  Context("A Context", [] {
     It("Does something", [] {
       Expect(1).toEqual(1);
       Expect(2).toEqual(3);

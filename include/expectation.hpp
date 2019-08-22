@@ -18,7 +18,7 @@ namespace cspec {
       void toEqual(V value) {
 	toEqual(value,
 	  console.setOpt<Console::Mod::FG_Cyan>(),
-	  "Expectation Failed\n  ",
+	  "\nExpectation Failed\n  ",
 	  console.setOpt<Console::Mod::FG_Reset>(),
 	  "Expected ", 
 	  mExpectation, 
