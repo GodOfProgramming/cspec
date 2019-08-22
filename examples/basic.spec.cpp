@@ -36,6 +36,10 @@ std::ostream &operator<<(std::ostream &os, const Foobar& f) {
 BeginSpec(spec1)
 
 Describe("Foobar", [] {
+  BeforeEach([] {
+    console.write("About to run foobar test", '\n');
+  });
+
   AfterEach([] {
     console.write("Ran foobar test", '\n');
   });

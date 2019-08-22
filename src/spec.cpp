@@ -109,7 +109,11 @@ namespace cspec {
 
 int main() {
   console.write("\n\n", 
-    "Executed ", cspec::gSpecCount, " test", cspec::gSpecCount == 1 ? "" : "s", " with ", cspec::gFailures, " failure", cspec::gFailures == 1 ? "" : "s", '\n'
+    "Executed ", cspec::gSpecCount, 
+    " test", cspec::gSpecCount == 1 ? "" : "s", 
+    " with ", 
+    cspec::gFailures, 
+    " failure", cspec::gFailures == 1 ? "" : "s", '\n'
   );
   return !cspec::gFailures ? 0 : 1;
 }
