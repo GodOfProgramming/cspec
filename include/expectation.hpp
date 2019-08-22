@@ -16,7 +16,8 @@ namespace cspec {
 
       template <typename V>
       void toEqual(V value) {
-	toEqual(value, 
+	toEqual(value,
+	  console.setOpt<Console::Mod::FG_Cyan>(),
 	  "Expectation Failed\n  ", 
 	  "Expected ", 
 	  mExpectation, 

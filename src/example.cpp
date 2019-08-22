@@ -5,6 +5,10 @@
 BeginSpec(spec1)
 
 Describe("A description", [] {
+  BeforeEach([] {
+    console.write("In Desc BE", '\n');
+  });
+
   Context("A Context", [] {
     It("Does something", [] {
       Expect(1).toEqual(1);

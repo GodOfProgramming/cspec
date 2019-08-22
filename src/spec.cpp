@@ -15,7 +15,6 @@
 #define TAB_STR "  "
 
 namespace cspec {
-  static CustomVector<const char*> gTestDescStack;
   static CustomVector<TestBlock*> gTests;
 
   bool gInItBlock = false;
@@ -34,34 +33,30 @@ namespace cspec {
   }
 
   void _Describe_(const char* desc, TestFunc func) {
-    gTestDescStack.push(desc);
     DescribeBlock db(desc, func);
     gCurrentTest = &db;
     gTests.push(gCurrentTest);
     RunTest(db);
     gTests.pop();
-    gTestDescStack.pop();
+    gCurrentTest = nullptr;
   }
 
   void _Context_(const char* context, TestFunc func) {
-    gTestDescStack.push(context);
     ContextBlock cb(context, func);
     gCurrentTest = &cb;
     gTests.push(gCurrentTest);
     RunTest(cb);
     gTests.pop();
-    gTestDescStack.pop();
+    gCurrentTest = nullptr;
   }
 
   void _It_(const char* test, TestFunc func, const char* file, int line) {
-    gTestDescStack.push(test);
     gInItBlock = true;
     ItBlock ib(test, func);
     ib.PrevTests = gTests;
     gCurrentTest = &ib;
     gTests.push(gCurrentTest);
     RunTest(ib);
-    gTests.pop();
     gInItBlock = false;
 
     if (gItFailed) {
@@ -69,25 +64,27 @@ namespace cspec {
       gAllPassed = false;
       int tabcount = 1;
       console.write(
-	  "Failure at: ", 
-	  console.setOpt<Console::Mod::FG_Red>(), file, 
-	  console.setOpt<Console::Mod::FG_Yellow>(), '(', line, ')', '\n'
-	);
-      for (const auto& desc : gTestDescStack) {
+	"Failure at: ", 
+	console.setOpt<Console::Mod::FG_Red>(), file, 
+	console.setOpt<Console::Mod::FG_Yellow>(), '(', line, ')', '\n'
+      );
+      for (const auto& test : gTests) {
 	for (int i = 0; i < tabcount; i++) {
 	  console.write(TAB_STR);
 	}
-	console.write(desc, '\n');
+	console.write(test->Desc, '\n');
 	tabcount++;
       }
       console.write('\n');
     }
 
-    gTestDescStack.pop();
+    gTests.pop();
   }
 
   void _BeforeEach_(TestFunc func) {
-    gCurrentTest->beforeEach = func;
+    if (gCurrentTest) {
+      gCurrentTest->beforeEach = func;
+    }
   }
 }
 

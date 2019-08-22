@@ -8,16 +8,15 @@ namespace cspec {
 
   class TestBlock {
     public:
-      TestBlock(const char* name, TestFunc test);
+      TestBlock(const char* desc, TestFunc test);
       virtual ~TestBlock() = default;
 
       virtual void run();
 
       TestFunc beforeEach;
 
-    private:
-      const char* mName;
-      TestFunc mTest;
+      const char* const Desc;
+      const TestFunc Test;
   };
 }
 

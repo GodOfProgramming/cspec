@@ -14,7 +14,7 @@
 #define Describe(desc, func) cspec::_Describe_(desc, func)
 #define Context(context, func) cspec::_Context_(context, func)
 #define It(test, func) cspec::_It_(test, func, __FILE__, __LINE__)
-#define BeforeEach(func) 
+#define BeforeEach(func) cspec::_BeforeEach_(func)
 
 namespace cspec {
   typedef std::shared_ptr<TestBlock> BlockPtr;
