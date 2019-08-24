@@ -5,7 +5,7 @@ A spec framework for C++ modeled after RSpec & Protractor. The syntax it is very
 
 ## Usage
 - Download/Clone the repo
-- Run the libcspec.a makefile target
+- Run the libcspec.a makefile target, which should be the default one anyway
 - Move the produced static library into whatever project you want to run tests for
 - Add CSpec's include directory to your project's include path
 - Write specs (examples provided in given directory)
