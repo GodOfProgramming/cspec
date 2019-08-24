@@ -4,20 +4,19 @@
 #include "custom_vector.hpp"
 
 namespace cspec {
-  typedef std::function<void(void)> TestFunc;
+typedef std::function<void(void)> TestFunc;
 
-  class TestBlock {
-    public:
-      TestBlock(const char* desc, TestFunc test);
-      virtual ~TestBlock() = default;
+class TestBlock {
+ public:
+  TestBlock(const char* desc, TestFunc test);
+  virtual ~TestBlock() = default;
 
-      virtual void run();
+  virtual void run();
 
-      TestFunc beforeEach;
-      TestFunc afterEach;
+  TestFunc beforeEach;
+  TestFunc afterEach;
 
-      const char* const Desc;
-      const TestFunc Test;
-  };
+  const char* const Desc;
+  const TestFunc Test;
+};
 }
-

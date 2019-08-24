@@ -34,4 +34,3 @@ class SpecRunner {
   static void RunTests();
 };
 }
-

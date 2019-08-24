@@ -2,7 +2,7 @@
 #include <iostream>
 
 class Console {
-public:
+ public:
   enum class Mod {
     /* Forground */
     FG_Reset,
@@ -43,18 +43,22 @@ public:
 
   Console() = default;
 
-  template <Mod E> constexpr inline const char *setOpt() {
+  template <Mod E>
+  constexpr inline const char *setOpt() {
     return tostr<E>::value;
   }
 
-  template <typename... Args> void write(Args &&... args) {
+  template <typename... Args>
+  void write(Args &&... args) {
     ((std::cout << std::forward<Args>(args)), ...)
         << setOpt<Mod::M_FullReset>();
   }
 
-private:
-  template <Mod E> struct tostr { static const char *const value; };
+ private:
+  template <Mod E>
+  struct tostr {
+    static const char *const value;
+  };
 };
 
 extern Console console;
-
