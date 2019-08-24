@@ -28,20 +28,38 @@ namespace cspec {
       }
 
       template <typename V, typename... Args>
-      void toEqual(V value, Args&& ...args) {
-	if (mExpectation != value) {
-	  console.write(args...);
+	void toEqual(V value, Args&& ...args) 
+	{
+	  if (mExpectation != value) 
+	  {
+	    console.write(args...);
+	    gItFailed = true;
+	  }
+	}
+
+      template <typename V, typename... Args>
+	void toContain(V value, Args&& ...args) 
+	{
+	  for (auto& element : mExpectation) 
+	  {
+	    if (element == value) 
+	    {
+	      return;
+	    }
+	  }
+
 	  gItFailed = true;
 	}
-      }
 
     private:
       E mExpectation;
   };
 
   template <typename T>
-  Expectation<T> _Expect_(T expectation) {
-    if (!gInItBlock) {
+  Expectation<T> _Expect_(T expectation) 
+  {
+    if (!gInItBlock) 
+    {
       throw InvalidExpectationException();
     }
     return Expectation<T>(expectation);
