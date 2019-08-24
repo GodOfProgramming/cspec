@@ -1,6 +1,6 @@
 # CSpec
 
-# Description
+## Description
 A spec framework for C++ modeled after RSpec & Protractor. The syntax it is very similar (Describe, Context, It, BeforeEach, AfterEach) so it shouldn't be too hard to use if you have experience with those languages. I am just sorta winging this so it's gonna have a very haphazard development process until I get a moment to focus. Currently no documentation aside from what's in the examples directory, but that really showcases all that it's currently capable of.
 
 ## Usage
