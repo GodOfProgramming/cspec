@@ -109,13 +109,23 @@ namespace cspec {
     }
   }
 
-  //template <>
-  //Expectation<const char*> _Expect_(const char* expectation) {
-  //  if (!gInItBlock) {
-  //    throw InvalidExpectationException();
-  //  }
-  //  return Expectation<const char*, false>(expectation);
-  //}
+  template <>
+  auto _Expect_(char* expectation) {
+      console.write('\n', "CHAR", '\n');
+    if (!gInItBlock) {
+      throw InvalidExpectationException();
+    }
+    return Expectation<char*, ExpectationOverride::CharChild>(expectation);
+  }
+
+  template <>
+  auto _Expect_(const char* expectation) {
+      console.write('\n', "CONST CHAR", '\n');
+    if (!gInItBlock) {
+      throw InvalidExpectationException();
+    }
+    return Expectation<const char*, ExpectationOverride::ConstCharChild>(expectation);
+  }
 
 }  // namespace cspec
 

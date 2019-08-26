@@ -20,7 +20,15 @@ MULTI_STATIC	:= -s libcspec.a
 
 EXECUTABLE	:= spec
 
-libcspec.a: $(OUT)/*.o
+ARCHIVE_OBJECTS	:= \
+    $(OUT)/spec.o \
+    $(OUT)/test_block.o \
+    $(OUT)/describe_block.o \
+    $(OUT)/context_block.o \
+    $(OUT)/it_block.o \
+    $(OUT)/console.o
+
+libcspec.a: $(ARCHIVE_OBJECTS)
 	$(AR) $(AR_FLAGS) $@ $^
 
 $(OUT)/spec.o: $(SRC)/spec.cpp

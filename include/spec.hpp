@@ -43,11 +43,11 @@ namespace cspec {
   void printCurrentTestStack();
 
   template <typename T>
-  Expectation<T> _Expect_(T expectation) {
+  auto _Expect_(T expectation) {
     if (!gInItBlock) {
       throw InvalidExpectationException();
     }
-    return Expectation<T>(expectation);
+    return Expectation<T, ExpectationOverride::None>(expectation);
   }
 
   class SpecRunner {

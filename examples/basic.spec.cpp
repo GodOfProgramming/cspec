@@ -16,6 +16,28 @@ Describe("A description", [] {
       Expect("thing").notToEqual("not thing");
     });
   });
+
+  Context("String tests", [] {
+    char* str1 = nullptr;
+    char* str2 = nullptr;
+
+    BeforeEach([&] {
+      str1 = new char[6];
+      str2 = new char[6];
+      memcpy(str1, "hello", sizeof(char) * 6);
+      memcpy(str2, "hello", sizeof(char) * 6);
+    });
+
+    AfterEach([&] {
+      delete[] str1;
+      delete[] str2;
+    });
+
+    It("strings are identical but not the same address", [&] {
+      Expect(str1).toEqual(str2);
+      Expect(&str1[0]).notToEqual(&str2[0]);
+    });
+  });
 });
 
 EndSpec;
