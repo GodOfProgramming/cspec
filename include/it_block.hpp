@@ -3,12 +3,12 @@
 #include "test_block.hpp"
 
 namespace cspec {
-class ItBlock : public TestBlock {
- public:
-  ItBlock(const char* name, TestFunc test);
+  class ItBlock : public TestBlock {
+   public:
+    ItBlock(const char* name, TestFunc test);
 
-  void run() override;
+    void run() override;
 
-  CustomVector<TestBlock*> PrevTests;
-};
-}
+    CustomVector<TestBlock*> PrevTests;
+  };
+}  // namespace cspec

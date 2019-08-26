@@ -2,21 +2,22 @@
 #include "console.hpp"
 
 namespace cspec {
-ItBlock::ItBlock(const char* name, TestFunc test) : TestBlock(name, test) {}
-
-void ItBlock::run() {
-  for (const auto& test : PrevTests) {
-    if (test->beforeEach) {
-      test->beforeEach();
-    }
+  ItBlock::ItBlock(const char* name, TestFunc test) : TestBlock(name, test) {
   }
 
-  TestBlock::run();
+  void ItBlock::run() {
+    for (const auto& test : PrevTests) {
+      if (test->beforeEach) {
+        test->beforeEach();
+      }
+    }
 
-  for (const auto& test : PrevTests) {
-    if (test->afterEach) {
-      test->afterEach();
+    TestBlock::run();
+
+    for (const auto& test : PrevTests) {
+      if (test->afterEach) {
+        test->afterEach();
+      }
     }
   }
-}
-}
+}  // namespace cspec

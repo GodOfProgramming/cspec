@@ -50,8 +50,7 @@ class Console {
 
   template <typename... Args>
   void write(Args &&... args) {
-    ((std::cout << std::forward<Args>(args)), ...)
-        << setOpt<Mod::M_FullReset>();
+    ((std::cout << std::forward<Args>(args)), ...) << setOpt<Mod::M_FullReset>();
   }
 
  private:

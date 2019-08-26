@@ -4,11 +4,17 @@ class Foobar {
  public:
   Foobar(int id) : mId(id){};
 
-  void change(int id) { this->mId = id; }
+  void change(int id) {
+    this->mId = id;
+  }
 
-  bool operator==(const Foobar& other) { return this->mId == other.mId; }
+  bool operator==(const Foobar& other) {
+    return this->mId == other.mId;
+  }
 
-  bool operator!=(const Foobar& other) { return !(*this == other); }
+  bool operator!=(const Foobar& other) {
+    return !(*this == other);
+  }
 
   std::string toString() const {
     std::stringstream ss;

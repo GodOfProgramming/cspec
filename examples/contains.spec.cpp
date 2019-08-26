@@ -21,10 +21,7 @@ Describe("Contain expectation", [] {
     It("Does contains 4", [&] { Expect(container).toContain(4); });
   });
 
-  Context("Element not present", [&] {
-    It("Doesn't contain 4", [&] { Expect(container).notToContain(4); });
-  });
+  Context("Element not present", [&] { It("Doesn't contain 4", [&] { Expect(container).notToContain(4); }); });
 });
 
 EndSpec;
-
