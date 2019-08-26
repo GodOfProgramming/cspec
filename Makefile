@@ -26,7 +26,8 @@ ARCHIVE_OBJECTS	:= \
     $(OUT)/describe_block.o \
     $(OUT)/context_block.o \
     $(OUT)/it_block.o \
-    $(OUT)/console.o
+    $(OUT)/console.o \
+    $(OUT)/expectation.o
 
 libcspec.a: $(ARCHIVE_OBJECTS)
 	$(AR) $(AR_FLAGS) $@ $^
@@ -49,13 +50,16 @@ $(OUT)/it_block.o: $(SRC)/it_block.cpp
 $(OUT)/console.o: $(SRC)/console.cpp
 	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
 
+$(OUT)/expectation.o: $(SRC)/expectation.cpp
+	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
+
 multicompilation: $(SRC)/*.cpp
 	@multi-compile.rb $(CXX) $^ $(MULTI_FLAGS) $(MULTI_INCLUDE)
 
 example: $(BIN)/$(EXECUTABLE)
 
 $(BIN)/$(EXECUTABLE): $(EXAMPLES)/*.spec.cpp
-	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $^ $(STATIC_LIBS) -o $@ $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $(STATIC_LIBS) $^ -o $@ $(LIBRARIES)
 
 clean:
 	-rm $(BIN)/* $(OUT)/*
