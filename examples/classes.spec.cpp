@@ -43,4 +43,4 @@ Describe("Foobar", [] {
   It("equal", [&] { Expect(foo).toEqual(bar); });
 });
 
-EndSpec;
+EndSpec();

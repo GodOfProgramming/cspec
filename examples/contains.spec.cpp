@@ -24,4 +24,4 @@ Describe("Contain expectation", [] {
   Context("Element not present", [&] { It("Doesn't contain 4", [&] { Expect(container).notToContain(4); }); });
 });
 
-EndSpec;
+EndSpec();

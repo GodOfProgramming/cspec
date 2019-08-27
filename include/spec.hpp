@@ -7,12 +7,13 @@
 #include "test_block.hpp"
 
 /* Define a variable to hold the value of the self executing lambda */
-#define BeginSpec(test_name) int var##test_name = [] {
+#define BeginSpec(test_name) int var##test_name = [] { \
+   console.write('\n', "Executing: ", console.setOpt<Console::Mod::FG_Magenta>(), #test_name, '\n')
 /* Return 0 and execute the lambda */
-#define EndSpec \
-  return 0;     \
-  }             \
-  ();
+#define EndSpec() \
+  return 0;       \
+  }               \
+  ()
 
 /* Has to use __VA_ARGS__ here because of how preprocessor parsing works,
  * otherwise anything in the capture list of the function (ex: [foo, bar] {})
@@ -25,7 +26,7 @@
  */
 
 #define Describe(desc, ...) cspec::_Describe_(desc, __VA_ARGS__)
-#define Context(context, ...) cspec::_Context_(context, __VA_ARGS__)
+#define Context(context, ...) cspec::_Context_(context, __VA_ARGS__) 
 #define It(test, ...) cspec::_It_(test, __VA_ARGS__, __FILE__, __LINE__)
 #define BeforeEach(...) cspec::_BeforeEach_(__VA_ARGS__)
 #define AfterEach(...) cspec::_AfterEach_(__VA_ARGS__)
@@ -43,7 +44,7 @@ namespace cspec {
   void printCurrentTestStack();
 
   template <typename T>
-  auto _Expect_(T expectation) {
+  Expectation<T, ExpectationOverride::None> _Expect_(T expectation) {
     if (!gInItBlock) {
       throw InvalidExpectationException();
     }

@@ -110,8 +110,8 @@ namespace cspec {
   }
 
   template <>
-  auto _Expect_(char* expectation) {
-      console.write('\n', "CHAR", '\n');
+  Expectation<char*, ExpectationOverride::CharChild> _Expect_(char* expectation) {
+    console.write('\n', "CHAR", '\n');
     if (!gInItBlock) {
       throw InvalidExpectationException();
     }
@@ -119,14 +119,13 @@ namespace cspec {
   }
 
   template <>
-  auto _Expect_(const char* expectation) {
-      console.write('\n', "CONST CHAR", '\n');
+  Expectation<const char*, ExpectationOverride::ConstCharChild> _Expect_(const char* expectation) {
+    console.write('\n', "CONST CHAR", '\n');
     if (!gInItBlock) {
       throw InvalidExpectationException();
     }
     return Expectation<const char*, ExpectationOverride::ConstCharChild>(expectation);
   }
-
 }  // namespace cspec
 
 int main() {
