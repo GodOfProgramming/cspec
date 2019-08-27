@@ -1,6 +1,5 @@
 #pragma once
-
-#include <iomanip>
+#include "matchers.hpp"
 #include "console.hpp"
 #include "string.h"
 
@@ -8,9 +7,7 @@ namespace cspec {
   extern bool gInItBlock;
   extern bool gItFailed;
 
-  enum class ExpectationOverride { None, CharBase, CharChild, ConstCharBase, ConstCharChild };
-
-  template <typename E, ExpectationOverride O>
+  template <typename E>
   class Expectation {
    public:
     Expectation(E expectation) : mExpectation(expectation) {
@@ -20,7 +17,6 @@ namespace cspec {
 
     template <typename V>
     void toEqual(V value) {
-      console.write('\n', "In base toEqual", '\n');
       toEqual(value,
           console.setOpt<Console::Mod::FG_Cyan>(),
           "\nExpectation Failed\n  ",
@@ -35,10 +31,9 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void toEqual(V value, Args&&... args) {
-      if (mExpectation != value) {
-        console.write(args...);
-        gItFailed = true;
-      }
+      ToEqual<V> matcher(mExpectation);
+
+      checkResult(matcher(value));
     }
 
     template <typename V>
@@ -57,10 +52,9 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void notToEqual(V value, Args&&... args) {
-      if (mExpectation == value) {
-        console.write(args...);
-        gItFailed = true;
-      }
+      NotToEqual<V> matcher(mExpectation);
+
+      checkResult(matcher(value));
     }
 
     /* There are many kinds of iterables,
@@ -82,14 +76,9 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void toContain(V value, Args&&... args) {
-      for (auto& element : mExpectation) {
-        if (element == value) {
-          return;
-        }
-      }
+      ToContain<V> matcher(mExpectation);
 
-      gItFailed = true;
-      console.write(args...);
+      checkResult(matcher(value));
     }
 
     template <typename V>
@@ -106,91 +95,19 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void notToContain(V value, Args&&... args) {
-      for (auto& element : mExpectation) {
-        if (element == value) {
-          gItFailed = true;
-          console.write(args...);
-          return;
-        }
-      }
+      notToContain<V> matcher(mExpectation);
+
+      checkResult(matcher(value));
     }
 
-   protected:
+   private:
     E mExpectation;
-  };
-
-  template<>
-  class Expectation<char*, ExpectationOverride::CharChild> : public Expectation<char*, ExpectationOverride::CharBase> {
-   public:
-    Expectation(char* value) : Expectation<char*, ExpectationOverride::CharBase>(value) {
-      console.write('\n', "In CharChild", '\n');
-    }
-
-    ~Expectation() override = default;
-
-    void toEqual(char* value) {
-      console.write('\n', "In CharChild toEqual", '\n');
-      toEqual(value,
-          console.setOpt<Console::Mod::FG_Cyan>(),
-          "\nExpectation Failed\n  ",
-          console.setOpt<Console::Mod::FG_Reset>(),
-          "Expected ",
-          '"',
-          mExpectation,
-          '"',
-          " to equal ",
-          '"',
-          value,
-          '"',
-          '\n',
-          '\n');
-    }
-
-    template <typename A>
-    void test(A a) {
-      console.write(a, '\n');
-    }
 
     template <typename... Args>
-    void toEqual(char* value, Args&&... args) {
-      console.write('\n', "In CharChild toEqual...", '\n');
-      if (strcmp(mExpectation, value)) {
-        gItFailed = true;
+    inline void checkResult(bool res, Args&&... args) {
+      if (!res) {
         console.write(args...);
-      }
-    }
-  };
-
-  template <>
-  class Expectation<const char*, ExpectationOverride::ConstCharChild>
-      : public Expectation<const char*, ExpectationOverride::ConstCharBase> {
-   public:
-    Expectation(const char* expectation) : Expectation<const char*, ExpectationOverride::ConstCharBase>(expectation) {
-      console.write('\n', "In ConstCharChild", '\n');
-    }
-
-    ~Expectation() override = default;
-
-    void toEqual(const char* value) {
-      console.write('\n', "In ConstCharChild toEqual", '\n');
-      toEqual(value,
-          console.setOpt<Console::Mod::FG_Cyan>(),
-          "\nExpectation Failed\n  ",
-          console.setOpt<Console::Mod::FG_Reset>(),
-          "Expected '",
-          mExpectation,
-          "' to equal '",
-          value,
-          '\'',
-          '\n',
-          '\n');
-    }
-
-    template <typename... Args>
-    void toEqual(const char* value, Args&&... args) {
-      if (strcmp(mExpectation, value)) {
         gItFailed = true;
-        console.write(args...);
       }
     }
   };

@@ -1,5 +1,7 @@
 #include "spec.hpp"
 
+using namespace cspec;
+
 BeginSpec(spec1);
 
 Describe("A description", [] {

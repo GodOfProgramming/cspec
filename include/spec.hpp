@@ -8,7 +8,7 @@
 
 /* Define a variable to hold the value of the self executing lambda */
 #define BeginSpec(test_name) int var##test_name = [] { \
-   console.write('\n', "Executing: ", console.setOpt<Console::Mod::FG_Magenta>(), #test_name, '\n')
+    cspec::console.write('\n', "Executing: ", cspec::console.setOpt<cspec::Console::Mod::FG_Magenta>(), #test_name, '\n')
 /* Return 0 and execute the lambda */
 #define EndSpec() \
   return 0;       \
@@ -44,11 +44,11 @@ namespace cspec {
   void printCurrentTestStack();
 
   template <typename T>
-  Expectation<T, ExpectationOverride::None> _Expect_(T expectation) {
+  Expectation<T, EO> _Expect_(T expectation) {
     if (!gInItBlock) {
       throw InvalidExpectationException();
     }
-    return Expectation<T, ExpectationOverride::None>(expectation);
+    return Expectation<T>(expectation);
   }
 
   class SpecRunner {

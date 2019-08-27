@@ -108,28 +108,10 @@ namespace cspec {
       tabcount++;
     }
   }
-
-  template <>
-  Expectation<char*, ExpectationOverride::CharChild> _Expect_(char* expectation) {
-    console.write('\n', "CHAR", '\n');
-    if (!gInItBlock) {
-      throw InvalidExpectationException();
-    }
-    return Expectation<char*, ExpectationOverride::CharChild>(expectation);
-  }
-
-  template <>
-  Expectation<const char*, ExpectationOverride::ConstCharChild> _Expect_(const char* expectation) {
-    console.write('\n', "CONST CHAR", '\n');
-    if (!gInItBlock) {
-      throw InvalidExpectationException();
-    }
-    return Expectation<const char*, ExpectationOverride::ConstCharChild>(expectation);
-  }
 }  // namespace cspec
 
 int main() {
-  console.write("\n\n",
+    cspec::console.write("\n\n",
       "Executed ",
       cspec::gSpecCount,
       " test",
