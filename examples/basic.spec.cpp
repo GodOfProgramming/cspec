@@ -36,12 +36,8 @@ Describe("A description", [] {
     });
 
     It("strings are identical but not the same address", [&] {
-      console.write("\n\n\n\n\n\n");
       Expect(str1).toEqual(str2);
-      // Expect(str1).test("AAAAAAAAAAAAA");
-      cspec::Expectation<char*, cspec::ExpectationOverride::CharChild>(str1).toEqual(str2);
-      // Expect(&str1[0]).notToEqual(&str2[0]);
-      console.write("\n\n\n\n\n\n");
+      Expect(&str1[0]).notToEqual(&str2[0]);
     });
   });
 });

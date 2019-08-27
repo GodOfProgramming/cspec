@@ -31,9 +31,9 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void toEqual(V value, Args&&... args) {
-      ToEqual<V> matcher(mExpectation);
+      matchers::ToEqual<E, V> matcher(mExpectation);
 
-      checkResult(matcher(value));
+      checkResult(matcher(value), args...);
     }
 
     template <typename V>
@@ -52,9 +52,9 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void notToEqual(V value, Args&&... args) {
-      NotToEqual<V> matcher(mExpectation);
+      matchers::NotToEqual<E, V> matcher(mExpectation);
 
-      checkResult(matcher(value));
+      checkResult(matcher(value), args...);
     }
 
     /* There are many kinds of iterables,
@@ -76,9 +76,9 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void toContain(V value, Args&&... args) {
-      ToContain<V> matcher(mExpectation);
+      matchers::ToContain<E, V> matcher(mExpectation);
 
-      checkResult(matcher(value));
+      checkResult(matcher(value), args...);
     }
 
     template <typename V>
@@ -95,9 +95,9 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void notToContain(V value, Args&&... args) {
-      notToContain<V> matcher(mExpectation);
+      matchers::NotToContain<E, V> matcher(mExpectation);
 
-      checkResult(matcher(value));
+      checkResult(matcher(value), args...);
     }
 
    private:

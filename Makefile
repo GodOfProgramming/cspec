@@ -26,8 +26,7 @@ ARCHIVE_OBJECTS	:= \
     $(OUT)/describe_block.o \
     $(OUT)/context_block.o \
     $(OUT)/it_block.o \
-    $(OUT)/console.o \
-    $(OUT)/expectation.o
+    $(OUT)/console.o
 
 libcspec.a: $(ARCHIVE_OBJECTS)
 	$(AR) $(AR_FLAGS) $@ $^
@@ -48,9 +47,6 @@ $(OUT)/it_block.o: $(SRC)/it_block.cpp
 	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
 
 $(OUT)/console.o: $(SRC)/console.cpp
-	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
-
-$(OUT)/expectation.o: $(SRC)/expectation.cpp
 	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
 
 multicompilation: $(SRC)/*.cpp

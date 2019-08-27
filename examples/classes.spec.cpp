@@ -1,4 +1,5 @@
 #include "spec.hpp"
+#include "sstream"
 
 class Foobar {
  public:

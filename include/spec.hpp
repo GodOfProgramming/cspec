@@ -44,7 +44,7 @@ namespace cspec {
   void printCurrentTestStack();
 
   template <typename T>
-  Expectation<T, EO> _Expect_(T expectation) {
+  Expectation<T> _Expect_(T expectation) {
     if (!gInItBlock) {
       throw InvalidExpectationException();
     }
