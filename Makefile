@@ -27,6 +27,7 @@ $(LIBRARY): $(OBJ_FILES)
 $(OBJ)/%.o: $(SRC)/%.cpp
 	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $< -o $@
 
+# Example of what your makefile target could look like, just need to link the static lib
 $(BIN)/$(EXECUTABLE): $(EXAMPLES)/*.spec.cpp
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $(STATIC_LIBS) $^ -o $@
 
@@ -37,6 +38,4 @@ make_dirs:
 
 clean:
 	-@rm -f $(BIN)/* $(OBJ)/*
-
-FORCE:
 
