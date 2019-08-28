@@ -28,6 +28,8 @@ ARCHIVE_OBJECTS	:= \
     $(OUT)/it_block.o \
     $(OUT)/console.o
 
+all: make_dirs libcspec.a
+
 libcspec.a: $(ARCHIVE_OBJECTS)
 	$(AR) $(AR_FLAGS) $@ $^
 
@@ -55,7 +57,10 @@ multicompilation: $(SRC)/*.cpp
 example: $(BIN)/$(EXECUTABLE)
 
 $(BIN)/$(EXECUTABLE): $(EXAMPLES)/*.spec.cpp
-	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $(STATIC_LIBS) $^ -o $@ $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $(STATIC_LIBS) $^ -o $@
+
+make_dirs:
+	-@mkdir -p $(BIN) $(OUT)
 
 clean:
 	-rm $(BIN)/* $(OUT)/*
