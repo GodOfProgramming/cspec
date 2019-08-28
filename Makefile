@@ -29,7 +29,7 @@ $(OBJ)/%.o: $(SRC)/%.cpp
 
 # Example of what your makefile target could look like, just need to link the static lib
 $(BIN)/$(EXECUTABLE): $(EXAMPLES)/*.spec.cpp
-	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $(STATIC_LIBS) $^ -o $@
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -I$(EXAMPLES) $(STATIC_LIBS) $^ -o $@
 
 example: $(BIN)/$(EXECUTABLE)
 
