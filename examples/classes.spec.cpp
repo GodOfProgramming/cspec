@@ -1,6 +1,7 @@
 #include "spec.hpp"
 #include "sstream"
 
+// Used to demo usage of regular classes without specialization
 class Foobar {
  public:
   Foobar(int id) : mId(id){};
@@ -27,10 +28,13 @@ class Foobar {
   int mId;
 };
 
+// In the event an expectation fails, the expectation and value are
+// cout-ed and thus need to be compatible with the << operator
 std::ostream& operator<<(std::ostream& os, const Foobar& f) {
   return os << f.toString();
 }
 
+// Used for ToEqual specialization
 class Test {
  public:
   Test(std::string str) : mStr(str) {
@@ -52,6 +56,13 @@ std::ostream& operator<<(std::ostream& os, const Test& t) {
   return os << t.toString();
 }
 
+/* This is how you overload the ToEqual matcher (along with NotToEqual, ToContain, ...)
+ * Files to look at for what matchers to overload:
+ * to_equal.hpp,
+ * not_to_equal.hpp,
+ * to_contain.hpp,
+ * not_to_contain.hpp
+ */
 namespace cspec {
   namespace matchers {
     template <>
