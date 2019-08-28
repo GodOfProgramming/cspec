@@ -1,4 +1,7 @@
 #pragma once
+#include <stdexcept>
+#include <string.h>
+#include "console.hpp"
 
 namespace cspec {
   namespace matchers {
@@ -27,6 +30,29 @@ namespace cspec {
 
       bool operator()(V value) const {
         return this->mExpectation == value;
+      }
+    };
+
+    /* ToEqual specializations */
+    template <>
+    class ToEqual<char*, char*> : public Matcher<char*, char*> {
+     public:
+      ToEqual(char* expectation) : Matcher<char*, char*>(expectation) {
+      }
+
+      bool operator()(char* value) const {
+        return !strcmp(this->mExpectation, value);
+      }
+    };
+
+    template <>
+    class ToEqual<const char*, const char*> : public Matcher<const char*, const char*> {
+     public:
+      ToEqual(const char* expectation) : Matcher<const char*, const char*>(expectation) {
+      }
+
+      bool operator()(const char* value) const {
+        return !strcmp(this->mExpectation, value);
       }
     };
 

@@ -26,28 +26,32 @@ ARCHIVE_OBJECTS	:= \
     $(OUT)/describe_block.o \
     $(OUT)/context_block.o \
     $(OUT)/it_block.o \
+    $(OUT)/matchers.o \
     $(OUT)/console.o
 
 libcspec.a: $(ARCHIVE_OBJECTS)
 	$(AR) $(AR_FLAGS) $@ $^
 
 $(OUT)/spec.o: $(SRC)/spec.cpp
-	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@
 
 $(OUT)/test_block.o: $(SRC)/test_block.cpp
-	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@
 
 $(OUT)/describe_block.o: $(SRC)/describe_block.cpp
-	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@
 
 $(OUT)/context_block.o: $(SRC)/context_block.cpp
-	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@
 
 $(OUT)/it_block.o: $(SRC)/it_block.cpp
-	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@
+
+$(OUT)/matchers.o: $(SRC)/matchers.cpp
+	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@
 
 $(OUT)/console.o: $(SRC)/console.cpp
-	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $^ -o $@
 
 multicompilation: $(SRC)/*.cpp
 	@multi-compile.rb $(CXX) $^ $(MULTI_FLAGS) $(MULTI_INCLUDE)
@@ -61,6 +65,4 @@ clean:
 	-rm $(BIN)/* $(OUT)/*
 
 FORCE:
-
-
 
