@@ -1,5 +1,5 @@
 CXX		:= g++
-CXX_FLAGS 	:= -Wall -Wextra -std=c++17
+CXX_FLAGS 	:= -Wall -Wextra -std=c++17 -O3
 MULTI_FLAGS	:= -f -c -f -Wall -f -Wextra -f -std=c++17
 
 AR		:= ar

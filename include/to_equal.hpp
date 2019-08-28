@@ -21,11 +21,11 @@ namespace cspec {
     template <>
     class ToEqual<char*, char*> : public Matcher<char*, char*> {
      public:
-      ToEqual(char* expectation) : Matcher<char*, char*>(expectation) {
+      ToEqual(char*& expectation) : Matcher<char*, char*>(expectation) {
       }
 
       bool operator()(char* value) const {
-        return !strcmp(this->mExpectation, value);
+        return strcmp(this->mExpectation, value) == 0;
       }
     };
 
@@ -33,11 +33,35 @@ namespace cspec {
     template <>
     class ToEqual<const char*, const char*> : public Matcher<const char*, const char*> {
      public:
-      ToEqual(const char* expectation) : Matcher<const char*, const char*>(expectation) {
+      ToEqual(const char*& expectation) : Matcher<const char*, const char*>(expectation) {
       }
 
       bool operator()(const char* value) const {
-        return !strcmp(this->mExpectation, value);
+        return strcmp(this->mExpectation, value) == 0;
+      }
+    };
+
+    /* <char*, const char*> */
+    template <>
+    class ToEqual<char*, const char*> : public Matcher<char*, const char*> {
+     public:
+      ToEqual(char*& expectation) : Matcher<char*, const char*>(expectation) {
+      }
+
+      bool operator()(const char* value) const {
+        return strcmp(this->mExpectation, value) == 0;
+      }
+    };
+
+    /* <const char*, char*> */
+    template <>
+    class ToEqual<const char*, char*> : public Matcher<const char*, char*> {
+     public:
+      ToEqual(const char*& expectation) : Matcher<const char*, char*>(expectation) {
+      }
+
+      bool operator()(char* value) const {
+        return strcmp(this->mExpectation, value) == 0;
       }
     };
   }  // namespace matchers
