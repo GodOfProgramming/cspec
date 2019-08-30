@@ -56,7 +56,7 @@ std::ostream& operator<<(std::ostream& os, const Test& t) {
   return os << t.toString();
 }
 
-/* This is how you overload the ToEqual matcher (along with NotToEqual, ToContain, ...)
+/* This is how you overload the toEqual matcher (along with notToEqual, toContain, ...)
  * Files to look at for what matchers to overload:
  * to_equal.hpp,
  * not_to_equal.hpp,
@@ -66,15 +66,9 @@ std::ostream& operator<<(std::ostream& os, const Test& t) {
 namespace cspec {
   namespace matchers {
     template <>
-    class ToEqual<Test, Test> : public Matcher<Test, Test> {
-     public:
-      ToEqual(Test& expectation) : Matcher<Test, Test>(expectation) {
-      }
-
-      bool operator()(Test value) const {
-        return mExpectation.equals(value);
-      }
-    };
+    bool toEqual(Test expectation, Test value) {
+      return expectation.equals(value);
+    }
   }  // namespace matchers
 }  // namespace cspec
 

@@ -7,6 +7,7 @@ namespace cspec {
   extern bool gInItBlock;
   extern bool gItFailed;
 
+  /* Can also be specialized if needed and won't break anything as long as you follow similar logic */
   template <typename E>
   class Expectation {
    public:
@@ -31,9 +32,7 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void toEqual(V value, Args&&... args) {
-      matchers::ToEqual<E, V> matcher(mExpectation);
-
-      checkResult(matcher(value), args...);
+      checkResult(matchers::toEqual(mExpectation, value), args...);
     }
 
     template <typename V>
@@ -52,16 +51,9 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void notToEqual(V value, Args&&... args) {
-      matchers::NotToEqual<E, V> matcher(mExpectation);
-
-      checkResult(matcher(value), args...);
+      checkResult(matchers::notToEqual(mExpectation, value), args...);
     }
 
-    /* There are many kinds of iterables,
-     * a for loop lets the usual (vector, map, etc...) work
-     * along with anything else that defines the correct
-     * functions (begin(), end())
-     */
     template <typename V>
     void toContain(V value) {
       toContain(value,
@@ -76,9 +68,7 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void toContain(V value, Args&&... args) {
-      matchers::ToContain<E, V> matcher(mExpectation);
-
-      checkResult(matcher(value), args...);
+      checkResult(matchers::toContain(mExpectation, value), args...);
     }
 
     template <typename V>
@@ -95,16 +85,14 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void notToContain(V value, Args&&... args) {
-      matchers::NotToContain<E, V> matcher(mExpectation);
-
-      checkResult(matcher(value), args...);
+      checkResult(matchers::notToContain(mExpectation, value), args...);
     }
 
    private:
     E mExpectation;
 
     template <typename... Args>
-    inline void checkResult(bool res, Args&&... args) {
+    void checkResult(bool res, Args&&... args) {
       if (!res) {
         console.write(args...);
         gItFailed = true;

@@ -33,6 +33,9 @@ $(BIN)/$(EXECUTABLE): $(EXAMPLES)/*.spec.cpp
 
 example: $(BIN)/$(EXECUTABLE)
 
+run: example
+	$(BIN)/$(EXECUTABLE)
+
 make_dirs:
 	-@mkdir -p $(BIN) $(OBJ)
 

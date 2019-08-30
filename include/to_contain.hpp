@@ -1,23 +1,17 @@
 #pragma once
-#include "matcher.hpp"
 
 namespace cspec {
   namespace matchers {
+    /* Uses a for (element : container) {} syntax to support anything iterable */
     template <typename E, typename V>
-    class ToContain : public Matcher<E, V> {
-     public:
-      ToContain(E& expectation) : Matcher<E, V>(expectation) {
-      }
-
-      bool operator()(V value) const {
-        for (auto& element : this->mExpectation) {
-          if (element == value) {
-            return true;
-          }
+    bool toContain(E expectation, V value) {
+      for (auto& element : expectation) {
+        if (element == value) {
+          return true;
         }
-        return false;
       }
-    };
+      return false;
+    }
   }  // namespace matchers
 }  // namespace cspec
 
