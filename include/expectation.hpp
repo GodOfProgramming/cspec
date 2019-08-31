@@ -32,7 +32,9 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void toEqual(V value, Args&&... args) {
-      checkResult(matchers::toEqual(mExpectation, value), args...);
+      matchers::ToEqual<E, V> matcher;
+
+      checkResult(matcher(mExpectation, value), args...);
     }
 
     template <typename V>
@@ -51,7 +53,8 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void notToEqual(V value, Args&&... args) {
-      checkResult(matchers::notToEqual(mExpectation, value), args...);
+      matchers::NotToEqual<E, V> matcher;
+      checkResult(matcher(mExpectation, value), args...);
     }
 
     template <typename V>
@@ -68,7 +71,9 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void toContain(V value, Args&&... args) {
-      checkResult(matchers::toContain(mExpectation, value), args...);
+      matchers::ToContain<E, V> matcher;
+
+      checkResult(matcher(mExpectation, value), args...);
     }
 
     template <typename V>
@@ -85,7 +90,8 @@ namespace cspec {
 
     template <typename V, typename... Args>
     void notToContain(V value, Args&&... args) {
-      checkResult(matchers::notToContain(mExpectation, value), args...);
+      matchers::NotToContain<E, V> matcher;
+      checkResult(matcher(mExpectation, value), args...);
     }
 
    private:

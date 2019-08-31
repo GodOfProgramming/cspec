@@ -1,23 +1,46 @@
 #pragma once
+#include <string.h>
 
 namespace cspec {
   namespace matchers {
     template <typename E, typename V>
-    bool toEqual(E expectation, V value) {
-      return expectation == value;
-    }
+    struct ToEqual {
+      bool operator()(E& expectation, V& value) {
+        return expectation == value;
+      }
+    };
 
-    extern template <>
-    bool toEqual(char*, char*);
+    /* <char*, char*> */
+    template <>
+    struct ToEqual<char*, char*> {
+      bool operator()(char*& expectation, char*& value) {
+        return strcmp(expectation, value) == 0;
+      }
+    };
 
-    extern template <>
-    bool toEqual(const char*, const char*);
+    /* <char*, const char*> */
+    template <>
+    struct ToEqual<char*, const char*> {
+      bool operator()(char*& expectation, const char*& value) {
+        return strcmp(expectation, value) == 0;
+      }
+    };
 
-    extern template <>
-    bool toEqual(char*, const char*);
+    /* <const char*, char*> */
+    template <>
+    struct ToEqual<const char*, char*> {
+      bool operator()(const char*& expectation, char*& value) {
+        return strcmp(expectation, value) == 0;
+      }
+    };
 
-    extern template <>
-    bool toEqual(const char*, char*);
+    /* <const char*, const char*> */
+    template <>
+    struct ToEqual<const char*, const char*> {
+      bool operator()(const char*& expectation, const char*& value) {
+        return strcmp(expectation, value) == 0;
+      }
+    };
   }  // namespace matchers
 }  // namespace cspec
 

@@ -2,14 +2,17 @@
 
 namespace cspec {
   namespace matchers {
+    /* Uses the for (element : container) {} syntax to support anything iterable */
     template <typename E, typename V>
-    bool notToContain(E expectation, V value) {
-      for (auto& element : expectation) {
-        if (element == value) {
-          return false;
+    struct NotToContain {
+      bool operator()(E& expectation, V& value) {
+        for (auto& element : expectation) {
+          if (element == value) {
+            return false;
+          }
         }
+        return true;
       }
-      return true;
-    }
+    };
   }  // namespace matchers
 }  // namespace cspec
