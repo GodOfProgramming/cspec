@@ -25,20 +25,20 @@
  * instead of "test" and the lambda. "[foo" is one and "bar] {}" is the other
  */
 
-#define Describe(desc, ...) cspec::_Describe_(desc, __VA_ARGS__)
-#define Context(context, ...) cspec::_Context_(context, __VA_ARGS__) 
-#define It(test, ...) cspec::_It_(test, __VA_ARGS__, __FILE__, __LINE__)
-#define BeforeEach(...) cspec::_BeforeEach_(__VA_ARGS__)
-#define AfterEach(...) cspec::_AfterEach_(__VA_ARGS__)
+#define Describe cspec::_Describe_
+#define Context cspec::_Context_
+#define It cspec::_It_
+#define BeforeEach cspec::_BeforeEach_
+#define AfterEach cspec::_AfterEach_
 
-#define Expect(expectation) cspec::_Expect_(expectation)
+#define Expect cspec::_Expect_
 
 namespace cspec {
   typedef std::shared_ptr<TestBlock> BlockPtr;
 
   void _Describe_(const char* desc, TestFunc func);
   void _Context_(const char* context, TestFunc func);
-  void _It_(const char* test, TestFunc func, const char* file, int line);
+  void _It_(const char* test, TestFunc func);
   void _BeforeEach_(TestFunc func);
   void _AfterEach_(TestFunc func);
   void printCurrentTestStack();

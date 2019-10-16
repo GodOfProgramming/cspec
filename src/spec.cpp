@@ -53,7 +53,7 @@ namespace cspec {
     gCurrentTest = prev_test;
   }
 
-  void _It_(const char* test, TestFunc func, const char* file, int line) {
+  void _It_(const char* test, TestFunc func) {
     auto prev_test = gCurrentTest;
     ItBlock ib(test, func);
     ib.PrevTests = gTests;
@@ -69,14 +69,6 @@ namespace cspec {
     if (gItFailed) {
       gFailures++;
       gItFailed = false;
-      console.write("Failure at: ",
-          console.setOpt<Console::Mod::FG_Red>(),
-          file,
-          console.setOpt<Console::Mod::FG_Yellow>(),
-          '(',
-          line,
-          ')',
-          '\n');
       printCurrentTestStack();
     } else {
       console.write(console.setOpt<Console::Mod::FG_Green>(), "\u2022");
@@ -123,4 +115,3 @@ int main() {
       '\n');
   return !cspec::gFailures ? 0 : 1;
 }
-
