@@ -5,9 +5,24 @@
 namespace cspec {
   class ItBlock : public TestBlock {
    public:
-    ItBlock(const char* name, TestFunc test);
+    inline ItBlock(const char* name, TestFunc test) : TestBlock(name, test) {
+    }
 
-    void run() override;
+    inline void run() override {
+      for (const auto& test : PrevTests) {
+        if (test->beforeEach) {
+          test->beforeEach();
+        }
+      }
+
+      TestBlock::run();
+
+      for (const auto& test : PrevTests) {
+        if (test->afterEach) {
+          test->afterEach();
+        }
+      }
+    }
 
     CustomVector<TestBlock*> PrevTests;
   };

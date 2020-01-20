@@ -5,6 +5,8 @@
 namespace cspec {
   class ContextBlock : public TestBlock {
    public:
-    ContextBlock(const char* name, TestFunc test);
-  };
+    inline ContextBlock(const char* name, TestFunc test) : TestBlock(name, test) {
+    }
+  };  // namespace cspec
 }  // namespace cspec
+

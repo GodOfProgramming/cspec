@@ -8,10 +8,13 @@ namespace cspec {
 
   class TestBlock {
    public:
-    TestBlock(const char* desc, TestFunc test);
+    inline TestBlock(const char* desc, TestFunc test) : Desc(desc), Test(test) {
+    }
     virtual ~TestBlock() = default;
 
-    virtual void run();
+    virtual inline void run() {
+      Test();
+    }
 
     TestFunc beforeEach;
     TestFunc afterEach;

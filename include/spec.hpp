@@ -8,7 +8,7 @@
 
 /* Define a variable to hold the value of the self executing lambda */
 #define BeginSpec(test_name) int var##test_name = [] { \
-    cspec::console.write('\n', "Executing: ", cspec::console.setOpt<cspec::Console::Mod::FG_Magenta>(), #test_name, '\n')
+    console.write('\n', "Executing: ", console.setOpt<dash::Mod::FG_Magenta>(), #test_name, '\n')
 /* Return 0 and execute the lambda */
 #define EndSpec() \
   return 0;       \
