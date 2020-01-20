@@ -11,6 +11,8 @@ SRC		:= src
 INCLUDE		:= include
 EXAMPLES	:= examples
 
+INCLUDE_DIRS	:= -I$(INCLUDE) -I$(DASH_INCLUDE) -I$(FIBER_INCLUDE)
+
 SRC_FILES	:= $(wildcard $(SRC)/*.cpp)
 OBJ_FILES	:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRC_FILES))
 
@@ -25,11 +27,10 @@ $(LIBRARY): $(OBJ_FILES)
 	$(AR) $(AR_FLAGS) $@ $^
 
 $(OBJ)/%.o: $(SRC)/%.cpp
-	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $< -o $@
+	$(CXX) $(CXX_FLAGS) -c $(INCLUDE_DIRS) $< -o $@
 
-# Example of what your makefile target could look like, just need to link the static lib
 $(BIN)/$(EXECUTABLE): $(EXAMPLES)/*.spec.cpp
-	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -I$(EXAMPLES) $(STATIC_LIBS) $^ -o $@
+	$(CXX) $(CXX_FLAGS) $(INCLUDE_DIRS) -I$(EXAMPLES) $(STATIC_LIBS) $^ -o $@
 
 example: $(BIN)/$(EXECUTABLE)
 

@@ -1,10 +1,10 @@
-#include "spec.hpp"
+#include <console.hpp>
 #include <stdio.h>
 #include <exception>
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include "console.hpp"
+#include "spec.hpp"
 #include "context_block.hpp"
 #include "custom_vector.hpp"
 #include "describe_block.hpp"
@@ -13,6 +13,8 @@
 #include "it_block.hpp"
 
 #define TAB_STR "  "
+
+dash::Console console;
 
 namespace cspec {
   static CustomVector<TestBlock*> gTests;
@@ -71,7 +73,7 @@ namespace cspec {
       gItFailed = false;
       printCurrentTestStack();
     } else {
-      console.write(console.setOpt<Console::Mod::FG_Green>(), "\u2022");
+      console.write(console.setOpt<dash::Mod::FG_Green>(), "\u2022");
     }
 
     gTests.pop();
@@ -103,7 +105,7 @@ namespace cspec {
 }  // namespace cspec
 
 int main() {
-    cspec::console.write("\n\n",
+  console.write("\n\n",
       "Executed ",
       cspec::gSpecCount,
       " test",

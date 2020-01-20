@@ -1,7 +1,9 @@
 #pragma once
+#include <console.hpp>
 #include "matchers.hpp"
-#include "console.hpp"
 #include "string.h"
+
+extern dash::Console console;
 
 namespace cspec {
   extern bool gInItBlock;
@@ -19,9 +21,9 @@ namespace cspec {
     template <typename V>
     void toEqual(V value) {
       toEqual(value,
-          console.setOpt<Console::Mod::FG_Cyan>(),
+          console.setOpt<dash::Mod::FG_Cyan>(),
           "\nExpectation Failed\n  ",
-          console.setOpt<Console::Mod::FG_Reset>(),
+          console.setOpt<dash::Mod::FG_Reset>(),
           "Expected ",
           mExpectation,
           " to equal ",
@@ -40,9 +42,9 @@ namespace cspec {
     template <typename V>
     void notToEqual(V value) {
       notToEqual(value,
-          console.setOpt<Console::Mod::FG_Cyan>(),
+          console.setOpt<dash::Mod::FG_Cyan>(),
           "\nExpectation Failed\n  ",
-          console.setOpt<Console::Mod::FG_Reset>(),
+          console.setOpt<dash::Mod::FG_Reset>(),
           "Expected ",
           mExpectation,
           " not to equal ",
@@ -60,9 +62,9 @@ namespace cspec {
     template <typename V>
     void toContain(V value) {
       toContain(value,
-          console.setOpt<Console::Mod::FG_Cyan>(),
+          console.setOpt<dash::Mod::FG_Cyan>(),
           "\nExpectation Failed\n  ",
-          console.setOpt<Console::Mod::FG_Reset>(),
+          console.setOpt<dash::Mod::FG_Reset>(),
           "Expected a container to contain ",
           value,
           '\n',
@@ -79,9 +81,9 @@ namespace cspec {
     template <typename V>
     void notToContain(V value) {
       notToContain(value,
-          console.setOpt<Console::Mod::FG_Cyan>(),
+          console.setOpt<dash::Mod::FG_Cyan>(),
           "\nExpectation Failed\n  ",
-          console.setOpt<Console::Mod::FG_Reset>(),
+          console.setOpt<dash::Mod::FG_Reset>(),
           "Expected a container not to contain ",
           value,
           '\n',

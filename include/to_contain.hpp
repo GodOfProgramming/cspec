@@ -16,4 +16,3 @@ namespace cspec {
     };
   }  // namespace matchers
 }  // namespace cspec
-
