@@ -93,5 +93,22 @@ namespace cspec {
 
       std::string Message;
     };
+
+    /* <std::string, std::string> */
+    template <>
+    struct ToEqual<std::string, std::string> {
+      bool operator()(std::string& expectation, std::string& value) {
+        if (expectation == value) {
+          return true;
+        } else {
+          std::stringstream msg;
+          msg << "Expected \"" << expectation << "\" to equal \"" << value << '"';
+          Message = msg.str();
+          return false;
+        }
+      }
+
+      std::string Message;
+    };
   }  // namespace matchers
 }  // namespace cspec
