@@ -21,7 +21,7 @@ EXECUTABLE	:= spec
 
 STATIC_LIBS	:= $(LIBRARY)
 
-all: make_dirs $(LIBRARY)
+all: make_dirs $(LIBRARY) example
 
 $(LIBRARY): $(OBJ_FILES)
 	$(AR) $(AR_FLAGS) $@ $^

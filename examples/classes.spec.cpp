@@ -68,8 +68,15 @@ namespace cspec {
     template <>
     struct ToEqual<Test, Test> {
       bool operator()(Test expectation, Test value) {
-        return expectation.equals(value);
+        if (expectation.equals(value)) {
+          return true;
+        } else {
+          Message = ToEqualDefaultMessage(expectation, value);
+          return false;
+        }
       }
+
+      std::string Message;
     };
   }  // namespace matchers
 }  // namespace cspec

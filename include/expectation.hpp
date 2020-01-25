@@ -18,25 +18,18 @@ namespace cspec {
 
     virtual ~Expectation() = default;
 
-    template <typename V>
-    void toEqual(V value) {
-      toEqual(value,
-          console.setOpt<dash::Mod::FG_Cyan>(),
-          "\nExpectation Failed\n  ",
-          console.setOpt<dash::Mod::FG_Reset>(),
-          "Expected ",
-          mExpectation,
-          " to equal ",
-          value,
-          '\n',
-          '\n');
-    }
-
     template <typename V, typename... Args>
     void toEqual(V value, Args&&... args) {
       matchers::ToEqual<E, V> matcher;
 
-      checkResult(matcher(mExpectation, value), args...);
+      checkResult(matcher(mExpectation, value),
+          console.setOpt<dash::Mod::FG_Cyan>(),
+          "\nExpectation Failed\n  ",
+          console.setOpt<dash::Mod::FG_Reset>(),
+          matcher.Message,
+          '\n',
+          '\n',
+          args...);
     }
 
     template <typename V>
