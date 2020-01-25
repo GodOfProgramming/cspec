@@ -5,12 +5,9 @@
 #include <sstream>
 #include <vector>
 #include "spec.hpp"
-#include "context_block.hpp"
-#include "custom_vector.hpp"
-#include "describe_block.hpp"
+#include "blocks.hpp"
 #include "exceptions.hpp"
 #include "expectation.hpp"
-#include "it_block.hpp"
 
 #define TAB_STR "  "
 

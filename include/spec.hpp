@@ -1,10 +1,9 @@
 #pragma once
 #include <functional>
 #include <memory>
-#include <queue>
 #include "expectation.hpp"
 #include "exceptions.hpp"
-#include "test_block.hpp"
+#include "blocks.hpp"
 
 /* Define a variable to hold the value of the self executing lambda */
 #define BeginSpec(test_name) int var##test_name = [] { \
