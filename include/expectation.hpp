@@ -21,72 +21,25 @@ namespace cspec {
     template <typename V, typename... Args>
     void toEqual(V value, Args&&... args) {
       matchers::ToEqual<E, V> matcher;
-
-      checkResult(matcher(mExpectation, value),
-          console.setOpt<dash::Mod::FG_Cyan>(),
-          "\nExpectation Failed\n  ",
-          console.setOpt<dash::Mod::FG_Reset>(),
-          matcher.Message,
-          '\n',
-          '\n',
-          args...);
-    }
-
-    template <typename V>
-    void notToEqual(V value) {
-      notToEqual(value,
-          console.setOpt<dash::Mod::FG_Cyan>(),
-          "\nExpectation Failed\n  ",
-          console.setOpt<dash::Mod::FG_Reset>(),
-          "Expected ",
-          mExpectation,
-          " not to equal ",
-          value,
-          '\n',
-          '\n');
+      checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
     }
 
     template <typename V, typename... Args>
     void notToEqual(V value, Args&&... args) {
       matchers::NotToEqual<E, V> matcher;
-      checkResult(matcher(mExpectation, value), args...);
-    }
-
-    template <typename V>
-    void toContain(V value) {
-      toContain(value,
-          console.setOpt<dash::Mod::FG_Cyan>(),
-          "\nExpectation Failed\n  ",
-          console.setOpt<dash::Mod::FG_Reset>(),
-          "Expected a container to contain ",
-          value,
-          '\n',
-          '\n');
+      checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
     }
 
     template <typename V, typename... Args>
     void toContain(V value, Args&&... args) {
       matchers::ToContain<E, V> matcher;
-
-      checkResult(matcher(mExpectation, value), args...);
-    }
-
-    template <typename V>
-    void notToContain(V value) {
-      notToContain(value,
-          console.setOpt<dash::Mod::FG_Cyan>(),
-          "\nExpectation Failed\n  ",
-          console.setOpt<dash::Mod::FG_Reset>(),
-          "Expected a container not to contain ",
-          value,
-          '\n',
-          '\n');
+      checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
     }
 
     template <typename V, typename... Args>
     void notToContain(V value, Args&&... args) {
       matchers::NotToContain<E, V> matcher;
-      checkResult(matcher(mExpectation, value), args...);
+      checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
     }
 
    private:
@@ -95,7 +48,8 @@ namespace cspec {
     template <typename... Args>
     void checkResult(bool res, Args&&... args) {
       if (!res) {
-        console.write(args...);
+        console.write(
+            console.setOpt<dash::Mod::FG_Cyan>(), "\nExpectation Failed\n\t", console.setOpt<dash::Mod::FG_Reset>(), args...);
         gItFailed = true;
       }
     }

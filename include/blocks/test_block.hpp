@@ -4,7 +4,7 @@
 #include "custom_vector.hpp"
 
 namespace cspec {
-  typedef std::function<void(void)> TestFunc;
+  using TestFunc = std::function<void(void)>;
 
   class TestBlock {
    public:
