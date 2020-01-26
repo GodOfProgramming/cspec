@@ -66,8 +66,8 @@ std::ostream& operator<<(std::ostream& os, const Test& t) {
 namespace cspec {
   namespace matchers {
     template <>
-    struct ToEqual<Test, Test> {
-      bool operator()(Test expectation, Test value) {
+    struct ToEqual<::Test, ::Test> {
+      bool operator()(::Test expectation, ::Test value) {
         if (expectation.equals(value)) {
           return true;
         } else {

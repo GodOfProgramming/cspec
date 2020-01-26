@@ -1,5 +1,5 @@
 #pragma once
-#include "custom_vector.hpp"
+#include <deque>
 #include "test_block.hpp"
 
 namespace cspec {
@@ -24,6 +24,6 @@ namespace cspec {
       }
     }
 
-    CustomVector<TestBlock*> PrevTests;
+    std::deque<TestBlock*> PrevTests;
   };
 }  // namespace cspec
