@@ -1,18 +1,23 @@
 #pragma once
 #include <functional>
 #include <memory>
+#include <vector>
+#include <deque>
 #include "expectation.hpp"
 #include "exceptions.hpp"
 #include "blocks.hpp"
+#include "custom_vector.hpp"
 
 /* Define a variable to hold the value of the self executing lambda */
 #define BeginSpec(test_name) int var##test_name = [] { \
-    console.write('\n', "Executing: ", console.setOpt<dash::Mod::FG_Magenta>(), #test_name, '\n')
+    cspec::gCurrentTest = std::make_shared<cspec::Test>(); \
+    cspec::gCurrentTest->first = #test_name
 /* Return 0 and execute the lambda */
-#define EndSpec() \
-  return 0;       \
-  }               \
-  ()
+#define EndSpec()                                 \
+    cspec::gTests.push_back(cspec::gCurrentTest); \
+    return 0;                                     \
+    }                                             \
+    ()
 
 /* Has to use __VA_ARGS__ here because of how preprocessor parsing works,
  * otherwise anything in the capture list of the function (ex: [foo, bar] {})
@@ -32,26 +37,38 @@
 
 #define Expect cspec::_Expect_
 
-namespace cspec {
-  typedef std::shared_ptr<TestBlock> BlockPtr;
+extern std::vector<const char*> ARGV;
 
-  void _Describe_(const char* desc, TestFunc func);
-  void _Context_(const char* context, TestFunc func);
-  void _It_(const char* test, TestFunc func);
-  void _BeforeEach_(TestFunc func);
-  void _AfterEach_(TestFunc func);
-  void printCurrentTestStack();
+namespace cspec
+{
+    using Description = std::pair<const char*, TestFunc>;
+    using DescriptionQueue = std::deque<Description>;
+    using Test = std::pair<const char*, DescriptionQueue>;
+    using TestPtr = std::shared_ptr<Test>;
+    using TestQueue = std::deque<TestPtr>;
 
-  template <typename T>
-  Expectation<T> _Expect_(T expectation) {
-    if (!gInItBlock) {
-      throw InvalidExpectationException();
+    extern TestQueue gTests;
+    extern TestPtr gCurrentTest;
+    typedef std::shared_ptr<TestBlock> BlockPtr;
+
+    void _Describe_(const char* desc, TestFunc func);
+    void _Context_(const char* context, TestFunc func);
+    void _It_(const char* test, TestFunc func);
+    void _BeforeEach_(TestFunc func);
+    void _AfterEach_(TestFunc func);
+
+    template <typename T>
+    Expectation<T> _Expect_(T expectation)
+    {
+        if (!gInItBlock) {
+            throw InvalidExpectationException();
+        }
+        return Expectation<T>(expectation);
     }
-    return Expectation<T>(expectation);
-  }
 
-  class SpecRunner {
-   public:
-    static void RunTests();
-  };
+    class SpecRunner
+    {
+       public:
+        static void RunTests();
+    };
 }  // namespace cspec
