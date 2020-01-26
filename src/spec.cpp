@@ -6,7 +6,6 @@
 #include "blocks.hpp"
 #include "exceptions.hpp"
 #include "expectation.hpp"
-#include "custom_vector.hpp"
 
 #define TAB_STR "  "
 
@@ -25,7 +24,7 @@ namespace cspec
 
 namespace
 {
-    cspec::CustomVector<cspec::TestBlock*> gRunningTests;
+    std::deque<cspec::TestBlock*> gRunningTests;
     cspec::TestBlock* gRunningTest = nullptr;
 
     void printCurrentTestStack()
@@ -62,9 +61,9 @@ namespace cspec
         auto prev_test = gRunningTest;
         ContextBlock cb(context, func);
         gRunningTest = &cb;
-        gRunningTests.push(gRunningTest);
+        gRunningTests.push_back(gRunningTest);
         RunTest(cb);
-        gRunningTests.pop();
+        gRunningTests.pop_back();
         gRunningTest = prev_test;
     }
 
@@ -74,7 +73,7 @@ namespace cspec
         ItBlock ib(test, func);
         ib.PrevTests = gRunningTests;
         gRunningTest = &ib;
-        gRunningTests.push(gRunningTest);
+        gRunningTests.push_back(gRunningTest);
 
         gInItBlock = true;
         RunTest(ib);
@@ -90,7 +89,7 @@ namespace cspec
             console.write(console.setOpt<dash::Mod::FG_Green>(), "\u2022");
         }
 
-        gRunningTests.pop();
+        gRunningTests.pop_back();
         gRunningTest = prev_test;
     }
 
@@ -126,9 +125,9 @@ int main(int argc, char* argv[])
             auto prev_test = gRunningTest;
             cspec::DescribeBlock db(desc.first, desc.second);
             gRunningTest = &db;
-            gRunningTests.push(gRunningTest);
+            gRunningTests.push_back(gRunningTest);
             RunTest(db);
-            gRunningTests.pop();
+            gRunningTests.pop_back();
             gRunningTest = prev_test;
         }
     }

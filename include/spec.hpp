@@ -6,7 +6,6 @@
 #include "expectation.hpp"
 #include "exceptions.hpp"
 #include "blocks.hpp"
-#include "custom_vector.hpp"
 
 /* Define a variable to hold the value of the self executing lambda */
 #define BeginSpec(test_name) int var##test_name = [] { \

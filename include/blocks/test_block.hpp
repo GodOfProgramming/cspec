@@ -1,7 +1,6 @@
 #pragma once
 #include <functional>
 #include <vector>
-#include "custom_vector.hpp"
 
 namespace cspec {
   using TestFunc = std::function<void(void)>;
