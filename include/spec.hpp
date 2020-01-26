@@ -65,10 +65,4 @@ namespace cspec
         }
         return Expectation<T>(expectation);
     }
-
-    class SpecRunner
-    {
-       public:
-        static void RunTests();
-    };
 }  // namespace cspec
