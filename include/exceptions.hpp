@@ -1,13 +1,16 @@
 #pragma once
 
-namespace cspec {
-  class InvalidExpectationException {
-   public:
-    InvalidExpectationException() = default;
-  };
+namespace cspec
+{
+    class InvalidExpectationException
+    {
+       public:
+        InvalidExpectationException() = default;
+    };
 
-  class SpecFailureException {
-   public:
-    SpecFailureException() = default;
-  };
+    class SpecFailureException
+    {
+       public:
+        SpecFailureException() = default;
+    };
 }  // namespace cspec

@@ -2,23 +2,30 @@
 #include <functional>
 #include <vector>
 
-namespace cspec {
-  using TestFunc = std::function<void(void)>;
+namespace cspec
+{
+    using TestFunc = std::function<void(void)>;
 
-  class TestBlock {
-   public:
-    inline TestBlock(const char* desc, TestFunc test) : Desc(desc), Test(test) {
+    class TestBlock
+    {
+       public:
+        TestBlock(const char* desc, TestFunc test);
+        virtual ~TestBlock() = default;
+
+        virtual void run();
+
+        TestFunc beforeEach;
+        TestFunc afterEach;
+
+        const char* const Desc;
+        const TestFunc Test;
+    };
+
+    inline TestBlock::TestBlock(const char* desc, TestFunc test) : Desc(desc), Test(test)
+    {}
+
+    inline void TestBlock::run()
+    {
+        Test();
     }
-    virtual ~TestBlock() = default;
-
-    virtual inline void run() {
-      Test();
-    }
-
-    TestFunc beforeEach;
-    TestFunc afterEach;
-
-    const char* const Desc;
-    const TestFunc Test;
-  };
 }  // namespace cspec
