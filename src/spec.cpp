@@ -1,4 +1,3 @@
-#include <console.hpp>
 #include <exception>
 #include <sstream>
 #include <algorithm>
@@ -9,8 +8,9 @@
 
 #define TAB_STR "  "
 
-dash::Console console;
+sys::Env ENV;
 std::vector<const char*> ARGV;
+dash::Console console;
 
 namespace cspec
 {

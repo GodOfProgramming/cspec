@@ -5,7 +5,9 @@ using namespace cspec;
 BeginSpec(spec1);
 
 Describe("A description", [] {
-    Context("ARGV init", [] { Expect(ARGV.size()).toEqual((unsigned int)1); });
+    Context("ARGV init", [] { It("passes", [] { Expect(ARGV.size()).toEqual((unsigned int)1); }); });
+    Context("ENV init", [] { It("passes", [] { Expect(ENV.size() > (unsigned int)1).toEqual(true); }); });
+
     Context("A Context", [] {
         It("Does something", [] {
             Expect(1).toEqual(1);

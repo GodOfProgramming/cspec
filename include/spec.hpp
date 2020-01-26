@@ -1,4 +1,6 @@
 #pragma once
+#include <console.hpp>
+#include <env.hpp>
 #include <functional>
 #include <memory>
 #include <vector>
@@ -36,6 +38,7 @@
 
 #define Expect cspec::_Expect_
 
+extern sys::Env ENV;
 extern std::vector<const char*> ARGV;
 
 namespace cspec

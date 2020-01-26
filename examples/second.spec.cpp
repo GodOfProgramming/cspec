@@ -7,11 +7,5 @@ Describe("A second spec", [] {
     auto b = "bar";
     Expect(a).toEqual(b);
   });
-
-  It("Fails again to see output", [] {
-    std::string a = "foo";
-    std::string b = "bar";
-    Expect(a).toEqual(b);
-  });
 });
 EndSpec();
