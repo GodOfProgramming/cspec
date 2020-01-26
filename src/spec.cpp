@@ -1,6 +1,7 @@
 #include <console.hpp>
 #include <exception>
 #include <sstream>
+#include <algorithm>
 #include "spec.hpp"
 #include "blocks.hpp"
 #include "exceptions.hpp"
@@ -114,6 +115,10 @@ int main(int argc, char* argv[])
     for (int i = 0; i < argc; i++) {
         ARGV[i] = argv[i];
     }
+
+    std::sort(cspec::gTests.begin(), cspec::gTests.end(), [](cspec::TestPtr a, cspec::TestPtr b) -> bool {
+        return strcmp(a->first, b->first) < 0;
+    });
 
     for (auto& test : cspec::gTests) {
         console.write('\n', "Executing: ", console.setOpt<dash::Mod::FG_Magenta>(), test->first, '\n');
