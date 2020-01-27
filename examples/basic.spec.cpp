@@ -1,4 +1,4 @@
-#include "spec.hpp"
+#include "cspec.hpp"
 
 using namespace cspec;
 

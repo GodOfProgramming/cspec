@@ -1,7 +1,7 @@
 #include <exception>
 #include <sstream>
 #include <algorithm>
-#include "spec.hpp"
+#include "cspec.hpp"
 #include "blocks.hpp"
 #include "exceptions.hpp"
 #include "expectation.hpp"

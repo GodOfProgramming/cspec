@@ -1,4 +1,4 @@
-#include "spec.hpp"
+#include "cspec.hpp"
 
 BeginSpec(spec3);
 Describe("A second spec", [] {
