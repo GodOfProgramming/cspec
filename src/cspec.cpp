@@ -154,6 +154,7 @@ int main(int argc, char* argv[])
         return strcmp(a->TestName, b->TestName) < 0;
     });
 
+    cspec::print("Running ", cspec::gTests.size(), " evaluations\n");
     for (auto& test : cspec::gTests) {
         cspec::print('\n', "Evaluating: ", "\x1b[35m", test->TestName, '\n');
         test->body();
