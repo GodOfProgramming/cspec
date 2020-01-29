@@ -15,6 +15,7 @@ std::vector<const char*> ARGV;
 
 namespace cspec
 {
+    std::stringstream gFailureMessages;
     using TestQueue = std::deque<CspecTest*>;
 
     bool gInItBlock = false;
@@ -36,16 +37,20 @@ namespace
     std::deque<cspec::TestBlock*> gRunningTests;
     cspec::TestBlock* gRunningTest = nullptr;
 
-    void printCurrentTestStack()
+    void appendCurrentTestStack()
     {
-        int tabcount = 1;
+	std::stringstream ss;
+	ss << "--------------------------------------\n\n";
+        int tabcount = 0;
         for (const auto& test : gRunningTests) {
             for (int i = 0; i < tabcount; i++) {
-		cspec::print(TAB_STR);
+		ss << TAB_STR;
             }
-	    cspec::print(test->Desc, '\n');
+	    ss << test->Desc << '\n';
             tabcount++;
         }
+	ss << cspec::captures();
+	cspec::capture(ss.str());
     }
 }  // namespace
 
@@ -99,7 +104,8 @@ namespace cspec
         if (gItFailed) {
             gFailures++;
             gItFailed = false;
-            printCurrentTestStack();
+            appendCurrentTestStack();
+            print("\x1b[31m", "\u00D7");
         } else {
             print("\x1b[32m", "\u2022");
         }
@@ -148,6 +154,8 @@ int main(int argc, char* argv[])
 	cspec::print('\n', "Evaluating: ", "\x1b[35m", test->TestName, '\n');
         test->body();
     }
+
+    cspec::print("\n\n", cspec::captures());
 
     cspec::print("\n\n",
         "Evaluated ",

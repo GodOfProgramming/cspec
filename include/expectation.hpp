@@ -53,7 +53,7 @@ namespace cspec
         void checkResult(bool res, Args&&... args)
         {
             if (!res) {
-                print("\x1b[31m", "\nEvaluation Failed\n\t", "\x1b[m", args...);
+                capture("\x1b[31m", "\nEvaluation Failed\n\t", "\x1b[m", args...);
                 gItFailed = true;
             }
         }

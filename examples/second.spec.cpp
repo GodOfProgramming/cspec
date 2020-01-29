@@ -7,6 +7,7 @@ Eval(spec3)
             auto a = "foo";
             auto b = "bar";
             Expect(a).toEqual(b);
+	    Expect(b).toEqual(a);
         });
     });
 }
