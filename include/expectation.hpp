@@ -13,7 +13,7 @@ namespace cspec
     class Expectation
     {
        public:
-        Expectation(E expectation) : mExpectation(expectation)
+        Expectation(E expectation, const char* file, int line) : mExpectation(expectation), mFile(file), mLine(line)
         {}
 
         virtual ~Expectation() = default;
@@ -48,12 +48,14 @@ namespace cspec
 
        private:
         E mExpectation;
+        const char* mFile;
+        int mLine;
 
         template <typename... Args>
         void checkResult(bool res, Args&&... args)
         {
             if (!res) {
-                capture("\x1b[31m", "\nEvaluation Failed\n\t", "\x1b[m", args...);
+                capture('\n', mFile, " (", mLine, "): ", "\x1b[31m", "Evaluation Failed\n\t", "\x1b[m", args...);
                 gItFailed = true;
             }
         }

@@ -9,5 +9,7 @@ Eval(spec3)
             Expect(a).toEqual(b);
 	    Expect(b).toEqual(a);
         });
+
+	Expect("this should trigger a InvalidExpectationException").toEqual("");
     });
 }

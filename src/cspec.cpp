@@ -39,18 +39,22 @@ namespace
 
     void appendCurrentTestStack()
     {
-	std::stringstream ss;
-	ss << "\n\n--------------------------------------\n\n\n";
-        int tabcount = 0;
-        for (const auto& test : gRunningTests) {
-            for (int i = 0; i < tabcount; i++) {
-		ss << TAB_STR;
-            }
-	    ss << test->Desc << '\n';
-            tabcount++;
-        }
-	ss << cspec::captures();
-	cspec::capture(ss.str());
+        std::stringstream ss;
+
+        // TODO disabled until described & contexts can be nested properly
+
+        // ss << "\n\n--------------------------------------\n\n\n";
+        // int tabcount = 0;
+        // for (const auto& test : gRunningTests) {
+        //    for (int i = 0; i < tabcount; i++) {
+        //	ss << TAB_STR;
+        //    }
+        //    ss << test->Desc << '\n';
+        //    tabcount++;
+        //}
+
+        ss << cspec::captures();
+        cspec::capture(ss.str());
     }
 }  // namespace
 
@@ -61,7 +65,7 @@ namespace cspec
         try {
             test.run();
         } catch (InvalidExpectationException e) {
-            print("Expectations can only be executed within it blocks", '\n');
+            print('\n', e.File, " (", e.Line, "): ", "Expectations can only be executed within it blocks", '\n');
         }
     }
 
@@ -151,11 +155,11 @@ int main(int argc, char* argv[])
     });
 
     for (auto& test : cspec::gTests) {
-	cspec::print('\n', "Evaluating: ", "\x1b[35m", test->TestName, '\n');
+        cspec::print('\n', "Evaluating: ", "\x1b[35m", test->TestName, '\n');
         test->body();
     }
 
-    cspec::print(cspec::captures());
+    cspec::print('\n', cspec::captures());
 
     cspec::print("\n\n",
         "Evaluated ",

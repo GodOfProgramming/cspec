@@ -5,12 +5,10 @@ namespace cspec
     class InvalidExpectationException
     {
        public:
-        InvalidExpectationException() = default;
-    };
+        inline InvalidExpectationException(const char* file, int line) : File(file), Line(line)
+        {}
 
-    class SpecFailureException
-    {
-       public:
-        SpecFailureException() = default;
+	const char* File;
+	int Line;
     };
 }  // namespace cspec

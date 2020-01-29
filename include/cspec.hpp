@@ -26,7 +26,7 @@
 #define BeforeEach cspec::_BeforeEach_
 #define AfterEach cspec::_AfterEach_
 
-#define Expect cspec::_Expect_
+#define Expect(expectation) cspec::_Expect_(expectation, __FILE__, __LINE__)
 
 extern std::unordered_map<std::string, std::string> ENV;
 extern std::vector<const char*> ARGV;
@@ -47,11 +47,11 @@ namespace cspec
     void _AfterEach_(TestFunc func);
 
     template <typename T>
-    Expectation<T> _Expect_(T expectation)
+    Expectation<T> _Expect_(T expectation, const char* file, int line)
     {
         if (!gInItBlock) {
-            throw InvalidExpectationException();
+            throw InvalidExpectationException(file, line);
         }
-        return Expectation<T>(expectation);
+        return Expectation<T>(expectation, file, line);
     }
 }  // namespace cspec
