@@ -40,7 +40,7 @@ namespace
     void appendCurrentTestStack()
     {
 	std::stringstream ss;
-	ss << "--------------------------------------\n\n";
+	ss << "\n\n--------------------------------------\n\n\n";
         int tabcount = 0;
         for (const auto& test : gRunningTests) {
             for (int i = 0; i < tabcount; i++) {
@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
         test->body();
     }
 
-    cspec::print("\n\n", cspec::captures());
+    cspec::print(cspec::captures());
 
     cspec::print("\n\n",
         "Evaluated ",
