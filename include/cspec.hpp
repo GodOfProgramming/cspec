@@ -9,26 +9,17 @@
 #include "exceptions.hpp"
 #include "blocks.hpp"
 
-/* Define a variable to hold the value of the self executing lambda */
-#define BeginSpec(test_name) int var##test_name = [] { \
-    cspec::gCurrentTest = std::make_shared<cspec::Test>(); \
-    cspec::gCurrentTest->first = #test_name
-/* Return 0 and execute the lambda */
-#define EndSpec()                                 \
-    cspec::gTests.push_back(cspec::gCurrentTest); \
-    return 0;                                     \
-    }                                             \
-    ()
-
-/* Has to use __VA_ARGS__ here because of how preprocessor parsing works,
- * otherwise anything in the capture list of the function (ex: [foo, bar] {})
- * will be split into multiple args for the func.
- *
- * So what happens using the above as the example is this:
- * If "It" is defined as: It(test, func)
- * then It("something", [foo, bar] {}) is interpreted as three args
- * instead of "test" and the lambda. "[foo" is one and "bar] {}" is the other
- */
+#define Eval(test_name)                                                         \
+    class _test_##test_name##_ : public cspec::CspecTest                        \
+    {                                                                           \
+       public:                                                                  \
+        _test_##test_name##_();                                                 \
+        void body() override;                                                   \
+    };                                                                          \
+    _test_##test_name##_ _var_##test_name##_;                                   \
+    _test_##test_name##_::_test_##test_name##_() : cspec::CspecTest(#test_name) \
+    {}                                                                          \
+    void _test_##test_name##_::body()
 
 #define Describe cspec::_Describe_
 #define Context cspec::_Context_
@@ -43,15 +34,12 @@ extern std::vector<const char*> ARGV;
 
 namespace cspec
 {
-    using Description = std::pair<const char*, TestFunc>;
-    using DescriptionQueue = std::deque<Description>;
-    using Test = std::pair<const char*, DescriptionQueue>;
-    using TestPtr = std::shared_ptr<Test>;
-    using TestQueue = std::deque<TestPtr>;
-
-    extern TestQueue gTests;
-    extern TestPtr gCurrentTest;
-    typedef std::shared_ptr<TestBlock> BlockPtr;
+    struct CspecTest
+    {
+        CspecTest(char const* test_name);
+        virtual void body() = 0;
+        char const* TestName;
+    };
 
     void _Describe_(const char* desc, TestFunc func);
     void _Context_(const char* context, TestFunc func);

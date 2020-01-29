@@ -25,22 +25,43 @@ STATIC_LIBS	:= $(STATIC_LIBRARY)
 
 LIB_DIRS	:= -L./
 
-all: make_dirs $(SHARED_LIBRARY) $(STATIC_LIBRARY) $(BIN)/$(EXECUTABLE).shared $(BIN)/$(EXECUTABLE).static
+all: 				\
+    make_dirs 			\
+    $(STATIC_LIBRARY) 		\
+    $(SHARED_LIBRARY)		\
+    $(BIN)/$(EXECUTABLE).static \
+    $(BIN)/$(EXECUTABLE).shared
 
-$(SHARED_LIBRARY): $(OBJ_FILES)
-	$(CXX) -shared -o $@ $^
-
-$(STATIC_LIBRARY): $(OBJ_FILES)
-	$(AR) $(AR_FLAGS) $@ $^
+####################
+### Common Tasks ###
+####################
 
 $(OBJ)/%.o: $(SRC)/%.cpp
 	$(CXX) $(CXX_FLAGS) -c $(INCLUDE_DIRS) $< -o $@
 
-$(BIN)/$(EXECUTABLE).shared: $(EXAMPLES)/*.spec.cpp
-	$(CXX) $(CXX_FLAGS) $(INCLUDE_DIRS) -I$(EXAMPLES) $(STATIC_LIBS) $^ -o $@
+######################
+### Static Library ###
+######################
+
+$(STATIC_LIBRARY): $(OBJ_FILES)
+	$(AR) $(AR_FLAGS) $@ $^
 
 $(BIN)/$(EXECUTABLE).static: $(EXAMPLES)/*.spec.cpp
+	$(CXX) $(CXX_FLAGS) $(INCLUDE_DIRS) -I$(EXAMPLES) $(STATIC_LIBS) $^ -o $@
+
+######################
+### Shared Library ###
+######################
+
+$(SHARED_LIBRARY): $(OBJ_FILES)
+	$(CXX) -shared -o $@ $^
+
+$(BIN)/$(EXECUTABLE).shared: $(EXAMPLES)/*.spec.cpp
 	$(CXX) $(CXX_FLAGS) $(INCLUDE_DIRS) -I$(EXAMPLES) $(LIB_DIRS) $^ -o $@ $(SHARED_LIBS)
+
+###############
+### Utility ###
+###############
 
 make_dirs:
 	-@mkdir -p $(BIN) $(OBJ)

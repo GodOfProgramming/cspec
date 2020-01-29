@@ -14,12 +14,20 @@ dash::Console console;
 
 namespace cspec
 {
+    using TestQueue = std::deque<CspecTest*>;
+
     bool gInItBlock = false;
     bool gItFailed = false;
+
     unsigned int gSpecCount = 0;
     unsigned int gFailures = 0;
+
     TestQueue gTests;
-    TestPtr gCurrentTest;
+
+    CspecTest::CspecTest(char const* test_name) : TestName(test_name)
+    {
+        gTests.push_back(this);
+    }
 }  // namespace cspec
 
 namespace
@@ -53,7 +61,13 @@ namespace cspec
 
     void _Describe_(const char* desc, TestFunc func)
     {
-        gCurrentTest->second.push_back({ desc, func });
+        auto prev_test = gRunningTest;
+        cspec::DescribeBlock db(desc, func);
+        gRunningTest = &db;
+        gRunningTests.push_back(gRunningTest);
+        RunTest(db);
+        gRunningTests.pop_back();
+        gRunningTest = prev_test;
     }
 
     void _Context_(const char* context, TestFunc func)
@@ -115,21 +129,13 @@ int main(int argc, char* argv[])
         ARGV[i] = argv[i];
     }
 
-    std::sort(cspec::gTests.begin(), cspec::gTests.end(), [](cspec::TestPtr a, cspec::TestPtr b) -> bool {
-        return strcmp(a->first, b->first) < 0;
+    std::sort(cspec::gTests.begin(), cspec::gTests.end(), [](cspec::CspecTest* a, cspec::CspecTest* b) -> bool {
+        return strcmp(a->TestName, b->TestName) < 0;
     });
 
     for (auto& test : cspec::gTests) {
-        console.write('\n', "Executing: ", console.setOpt<dash::Mod::FG_Magenta>(), test->first, '\n');
-        for (auto& desc : test->second) {
-            auto prev_test = gRunningTest;
-            cspec::DescribeBlock db(desc.first, desc.second);
-            gRunningTest = &db;
-            gRunningTests.push_back(gRunningTest);
-            RunTest(db);
-            gRunningTests.pop_back();
-            gRunningTest = prev_test;
-        }
+        console.write('\n', "Executing: ", console.setOpt<dash::Mod::FG_Magenta>(), test->TestName, '\n');
+        test->body();
     }
 
     console.write("\n\n",
