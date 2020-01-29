@@ -1,9 +1,7 @@
 #pragma once
-#include <console.hpp>
+#include "misc.hpp"
 #include "matchers.hpp"
 #include "string.h"
-
-extern dash::Console console;
 
 namespace cspec
 {
@@ -55,10 +53,7 @@ namespace cspec
         void checkResult(bool res, Args&&... args)
         {
             if (!res) {
-                console.write(console.setOpt<dash::Mod::FG_Cyan>(),
-                    "\nExpectation Failed\n\t",
-                    console.setOpt<dash::Mod::FG_Reset>(),
-                    args...);
+                print("\x1b[31m", "\nEvaluation Failed\n\t", "\x1b[m", args...);
                 gItFailed = true;
             }
         }

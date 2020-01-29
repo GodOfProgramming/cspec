@@ -11,7 +11,7 @@ SRC		:= src
 INCLUDE		:= include
 EXAMPLES	:= examples
 
-INCLUDE_DIRS	:= -I$(INCLUDE) -I$(DASH_INCLUDE) -I$(SYS_INCLUDE)
+INCLUDE_DIRS	:= -I$(INCLUDE) -I$(DASH_INCLUDE)
 
 SRC_FILES	:= $(wildcard $(SRC)/*.cpp)
 OBJ_FILES	:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRC_FILES))

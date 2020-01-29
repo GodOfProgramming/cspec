@@ -1,10 +1,9 @@
 #pragma once
-#include <console.hpp>
-#include <env.hpp>
 #include <functional>
 #include <memory>
 #include <vector>
 #include <deque>
+#include <unordered_map>
 #include "expectation.hpp"
 #include "exceptions.hpp"
 #include "blocks.hpp"
@@ -29,7 +28,7 @@
 
 #define Expect cspec::_Expect_
 
-extern sys::Env ENV;
+extern std::unordered_map<std::string, std::string> ENV;
 extern std::vector<const char*> ARGV;
 
 namespace cspec

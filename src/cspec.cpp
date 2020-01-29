@@ -2,15 +2,16 @@
 #include <sstream>
 #include <algorithm>
 #include "cspec.hpp"
+#include "misc.hpp"
 #include "blocks.hpp"
 #include "exceptions.hpp"
 #include "expectation.hpp"
 
 #define TAB_STR "  "
 
-sys::Env ENV;
+extern char** environ;
+std::unordered_map<std::string, std::string> ENV;
 std::vector<const char*> ARGV;
-dash::Console console;
 
 namespace cspec
 {
@@ -40,9 +41,9 @@ namespace
         int tabcount = 1;
         for (const auto& test : gRunningTests) {
             for (int i = 0; i < tabcount; i++) {
-                console.write(TAB_STR);
+		cspec::print(TAB_STR);
             }
-            console.write(test->Desc, '\n');
+	    cspec::print(test->Desc, '\n');
             tabcount++;
         }
     }
@@ -55,7 +56,7 @@ namespace cspec
         try {
             test.run();
         } catch (InvalidExpectationException e) {
-            console.write("Expectations can only be executed within it blocks", '\n');
+            print("Expectations can only be executed within it blocks", '\n');
         }
     }
 
@@ -100,7 +101,7 @@ namespace cspec
             gItFailed = false;
             printCurrentTestStack();
         } else {
-            console.write(console.setOpt<dash::Mod::FG_Green>(), "\u2022");
+            print("\x1b[32m", "\u2022");
         }
 
         gRunningTests.pop_back();
@@ -124,6 +125,16 @@ namespace cspec
 
 int main(int argc, char* argv[])
 {
+    for (int i = 0; environ[i]; i++) {
+        std::string env = environ[i];
+
+        auto eqpos = env.find_first_of('=');
+        auto k = env.substr(0, eqpos);
+        auto v = env.substr(eqpos + 1);
+
+        ENV[k] = v;
+    }
+
     ARGV.resize(argc);
     for (int i = 0; i < argc; i++) {
         ARGV[i] = argv[i];
@@ -134,12 +145,12 @@ int main(int argc, char* argv[])
     });
 
     for (auto& test : cspec::gTests) {
-        console.write('\n', "Executing: ", console.setOpt<dash::Mod::FG_Magenta>(), test->TestName, '\n');
+	cspec::print('\n', "Evaluating: ", "\x1b[35m", test->TestName, '\n');
         test->body();
     }
 
-    console.write("\n\n",
-        "Executed ",
+    cspec::print("\n\n",
+        "Evaluated ",
         cspec::gSpecCount,
         " test",
         cspec::gSpecCount == 1 ? "" : "s",
