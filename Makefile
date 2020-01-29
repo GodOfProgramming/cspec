@@ -1,8 +1,8 @@
 CXX		:= g++
-CXX_FLAGS 	:= -Wall -Wextra -std=c++17 -O3 -fPIC
+CXX_FLAGS 	:= -Wall -Wextra -std=c++17 -O3 
 
 AR		:= ar
-AR_FLAGS	:= rvs
+AR_ARGS		:= rvs
 
 BIN		:= bin
 OBJ		:= obj
@@ -11,10 +11,11 @@ SRC		:= src
 INCLUDE		:= include
 EXAMPLES	:= examples
 
-INCLUDE_DIRS	:= -I$(INCLUDE) -I$(DASH_INCLUDE)
-
 SRC_FILES	:= $(wildcard $(SRC)/*.cpp)
 OBJ_FILES	:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRC_FILES))
+
+EXAMPLE_SRC_FILES	:= $(wildcard $(EXAMPLES)/*.cpp)
+EXAMPLE_OBJ_FILES 	:= $(patsubst $(EXAMPLES)/%.cpp, $(OBJ)/%.o, $(EXAMPLE_SRC_FILES))
 
 STATIC_LIBRARY	:= libcspec.a
 SHARED_LIBRARY	:= libcspec.so
@@ -37,17 +38,20 @@ all: 				\
 ####################
 
 $(OBJ)/%.o: $(SRC)/%.cpp
-	$(CXX) $(CXX_FLAGS) -c $(INCLUDE_DIRS) $< -o $@
+	$(CXX) $(CXX_FLAGS) -c -fPIC -I$(INCLUDE) $< -o $@
+
+$(OBJ)/%.spec.o: $(EXAMPLES)/%.spec.cpp
+	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $< -o $@
 
 ######################
 ### Static Library ###
 ######################
 
 $(STATIC_LIBRARY): $(OBJ_FILES)
-	$(AR) $(AR_FLAGS) $@ $^
+	$(AR) $(AR_ARGS) $@ $^
 
-$(BIN)/$(EXECUTABLE).static: $(EXAMPLES)/*.spec.cpp
-	$(CXX) $(CXX_FLAGS) $(INCLUDE_DIRS) -I$(EXAMPLES) $(STATIC_LIBS) $^ -o $@
+$(BIN)/$(EXECUTABLE).static: $(EXAMPLE_OBJ_FILES)
+	$(CXX) $(CXX_FLAGS) -o $@ -I$(INCLUDE) -I$(EXAMPLES) $(STATIC_LIBS) $^
 
 ######################
 ### Shared Library ###
@@ -56,8 +60,8 @@ $(BIN)/$(EXECUTABLE).static: $(EXAMPLES)/*.spec.cpp
 $(SHARED_LIBRARY): $(OBJ_FILES)
 	$(CXX) -shared -o $@ $^
 
-$(BIN)/$(EXECUTABLE).shared: $(EXAMPLES)/*.spec.cpp
-	$(CXX) $(CXX_FLAGS) $(INCLUDE_DIRS) -I$(EXAMPLES) $(LIB_DIRS) $^ -o $@ $(SHARED_LIBS)
+$(BIN)/$(EXECUTABLE).shared: $(EXAMPLE_OBJ_FILES)
+	$(CXX) $(CXX_FLAGS) -o $@ -I$(INCLUDE) -I$(EXAMPLES) $(LIB_DIRS) $^ $(SHARED_LIBS)
 
 ###############
 ### Utility ###
