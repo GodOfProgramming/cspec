@@ -27,11 +27,15 @@ STATIC_LIBS	:= $(STATIC_LIBRARY)
 LIB_DIRS	:= -L./
 
 all: 				\
-    make_dirs 			\
+    $(BIN)			\
+    $(OBJ)			\
     $(STATIC_LIBRARY) 		\
     $(SHARED_LIBRARY)		\
     $(BIN)/$(EXECUTABLE).static \
     $(BIN)/$(EXECUTABLE).shared
+
+.PHONY: force
+force: clean all
 
 ####################
 ### Common Tasks ###
@@ -67,9 +71,13 @@ $(BIN)/$(EXECUTABLE).shared: $(EXAMPLE_OBJ_FILES)
 ### Utility ###
 ###############
 
-make_dirs:
-	-@mkdir -p $(BIN) $(OBJ)
+$(BIN):
+	-@mkdir -p $@
 
+$(OBJ):
+	-@mkdir -p $@
+
+.PHONY: clean
 clean:
-	-@rm -f $(SHARED_LIBRARY) $(STATIC_LIBRARY) $(BIN)/* $(OBJ)/*
+	-@rm -rf $(SHARED_LIBRARY) $(STATIC_LIBRARY) $(BIN) $(OBJ)
 

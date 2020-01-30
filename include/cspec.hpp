@@ -9,14 +9,14 @@
 #include "blocks.hpp"
 
 #define Eval(test_name)                                                         \
-    class _test_##test_name##_ : public cspec::CspecTest                        \
+    class _test_##test_name##_ : public cspec::Evaluation                        \
     {                                                                           \
        public:                                                                  \
         _test_##test_name##_();                                                 \
         void body() override;                                                   \
     };                                                                          \
     _test_##test_name##_ _var_##test_name##_;                                   \
-    _test_##test_name##_::_test_##test_name##_() : cspec::CspecTest(#test_name) \
+    _test_##test_name##_::_test_##test_name##_() : cspec::Evaluation(#test_name) \
     {}                                                                          \
     void _test_##test_name##_::body()
 
@@ -33,16 +33,21 @@ extern std::vector<const char*> ARGV;
 
 namespace cspec
 {
-    struct CspecTest
+    class Evaluation
     {
-        CspecTest(char const* test_name);
+       public:
+        Evaluation(char const* test_name);
+
+	static void Run();
+
         virtual void body() = 0;
-        char const* TestName;
+
+        char const* Name;
+
+       private:
+        static std::deque<Evaluation*> sTests;
     };
 
-    using TestQueue = std::deque<CspecTest*>;
-
-    extern TestQueue gTests;
     extern unsigned int gSpecCount;
     extern unsigned int gFailures;
 

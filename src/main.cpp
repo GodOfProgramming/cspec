@@ -1,4 +1,3 @@
-#include <algorithm>
 #include "cspec.hpp"
 #include "benchmark.hpp"
 
@@ -23,15 +22,7 @@ int main(int argc, char* argv[])
         ARGV[i] = argv[i];
     }
 
-    std::sort(cspec::gTests.begin(), cspec::gTests.end(), [](cspec::CspecTest* a, cspec::CspecTest* b) -> bool {
-        return strcmp(a->TestName, b->TestName) < 0;
-    });
-
-    cspec::print("Running ", cspec::gTests.size(), " evaluations\n");
-    for (auto& test : cspec::gTests) {
-        cspec::print('\n', "Evaluating: ", "\x1b[35m", test->TestName, '\n');
-        test->body();
-    }
+    cspec::Evaluation::Run();
 
     cspec::print('\n', cspec::captures());
 

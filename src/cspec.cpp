@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <exception>
 #include <sstream>
 #include "cspec.hpp"
@@ -18,11 +19,24 @@ namespace cspec
     unsigned int gSpecCount = 0;
     unsigned int gFailures = 0;
 
-    TestQueue gTests;
+    std::deque<Evaluation*> Evaluation::sTests;
 
-    CspecTest::CspecTest(char const* test_name) : TestName(test_name)
+    Evaluation::Evaluation(char const* test_name) : Name(test_name)
     {
-        gTests.push_back(this);
+        sTests.push_back(this);
+    }
+
+    void Evaluation::Run()
+    {
+        std::sort(sTests.begin(), sTests.end(), [](Evaluation* a, Evaluation* b) -> bool {
+            return strcmp(a->Name, b->Name) < 0;
+        });
+
+        cspec::print("Running ", sTests.size(), " evaluations\n");
+        for (auto& test : sTests) {
+            cspec::print('\n', "Evaluating: ", "\x1b[35m", test->Name, '\n');
+            test->body();
+        }
     }
 }  // namespace cspec
 
