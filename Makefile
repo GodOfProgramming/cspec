@@ -71,5 +71,5 @@ make_dirs:
 	-@mkdir -p $(BIN) $(OBJ)
 
 clean:
-	-@rm -f $(BIN)/* $(OBJ)/*
+	-@rm -f $(SHARED_LIBRARY) $(STATIC_LIBRARY) $(BIN)/* $(OBJ)/*
 

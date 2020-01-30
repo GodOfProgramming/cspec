@@ -40,6 +40,12 @@ namespace cspec
         char const* TestName;
     };
 
+    using TestQueue = std::deque<CspecTest*>;
+
+    extern TestQueue gTests;
+    extern unsigned int gSpecCount;
+    extern unsigned int gFailures;
+
     void _Describe_(const char* desc, TestFunc func);
     void _Context_(const char* context, TestFunc func);
     void _It_(const char* test, TestFunc func);
