@@ -17,14 +17,17 @@ OBJ_FILES	:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRC_FILES))
 EXAMPLE_SRC_FILES	:= $(wildcard $(EXAMPLES)/*.cpp)
 EXAMPLE_OBJ_FILES 	:= $(patsubst $(EXAMPLES)/%.cpp, $(OBJ)/%.o, $(EXAMPLE_SRC_FILES))
 
-STATIC_LIBRARY	:= libcspec.a
-SHARED_LIBRARY	:= libcspec.so
+LIB_NAME	:= libcspec
+STATIC_LIBRARY	:= $(LIB_NAME).a
+SHARED_LIBRARY	:= $(LIB_NAME).so
 EXECUTABLE	:= spec
 
 SHARED_LIBS	:= -lcspec
 STATIC_LIBS	:= $(STATIC_LIBRARY)
 
 LIB_DIRS	:= -L./
+
+INSTALL_DIR	:= /usr/local/lib64
 
 all: 				\
     $(BIN)			\
@@ -33,6 +36,15 @@ all: 				\
     $(SHARED_LIBRARY)		\
     $(BIN)/$(EXECUTABLE).static \
     $(BIN)/$(EXECUTABLE).shared
+
+install: all
+	@if [ -d $(INSTALL_DIR) ]; then 			\
+	    echo "Installing into $(INSTALL_DIR)"; 		\
+	    cp $(SHARED_LIBRARY) $(INSTALL_DIR);		\
+	    chmod 755 $(INSTALL_DIR)/$(SHARED_LIBRARY);		\
+	else 							\
+	    echo "'$(INSTALL_DIR)' does not exist, exiting"; 	\
+	fi
 
 .PHONY: force
 force: clean all
