@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+cspec::Clock Timer;
+
 namespace cspec
 {
     std::deque<Benchmark*> Benchmark::sBenchmarks;

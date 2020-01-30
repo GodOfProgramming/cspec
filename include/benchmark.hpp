@@ -2,6 +2,8 @@
 
 #include <deque>
 
+#include "clock.hpp"
+
 #define Bench(benchmark_name)                                                \
     class _benchmark_##benchmark_name##_ : public cspec::Benchmark           \
     {                                                                        \
@@ -12,6 +14,12 @@
     };                                                                       \
     _benchmark_##benchmark_name##_ _var_##benchmark_name##_;                 \
     void _benchmark_##benchmark_name##_::body()
+
+#define Do(times)  \
+    Timer.reset(); \
+    for (int i = 0; i < times; i++)
+
+extern cspec::Clock Timer;
 
 namespace cspec
 {

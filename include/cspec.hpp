@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <vector>
+#include <string>
 #include "evaluation.hpp"
 #include "expectation.hpp"
 #include "exceptions.hpp"
@@ -16,7 +17,7 @@
 #define Expect(expectation) cspec::_Expect_(expectation, __FILE__, __LINE__)
 
 extern std::unordered_map<std::string, std::string> ENV;
-extern std::vector<const char*> ARGV;
+extern std::vector<std::string> ARGV;
 
 namespace cspec
 {

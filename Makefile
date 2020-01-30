@@ -25,7 +25,7 @@ EXECUTABLE	:= spec
 SHARED_LIBS	:= -lcspec
 STATIC_LIBS	:= $(STATIC_LIBRARY)
 
-LIB_DIRS	:= -L./
+LIB_DIRS	:= -L.
 
 INSTALL_DIR	:= /usr/local/lib64
 

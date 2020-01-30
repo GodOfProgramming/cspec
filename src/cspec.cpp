@@ -6,10 +6,9 @@
 #include "exceptions.hpp"
 #include "expectation.hpp"
 
-const auto TAB_STR = "  ";
-
 namespace
 {
+    const auto TAB_STR = "  ";
     std::deque<cspec::TestBlock*> gRunningTests;
     cspec::TestBlock* gRunningTest = nullptr;
 }  // namespace
