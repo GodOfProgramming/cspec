@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <exception>
 #include <sstream>
 #include "cspec.hpp"
@@ -8,6 +7,12 @@
 #include "expectation.hpp"
 
 const auto TAB_STR = "  ";
+
+namespace
+{
+    std::deque<cspec::TestBlock*> gRunningTests;
+    cspec::TestBlock* gRunningTest = nullptr;
+}  // namespace
 
 namespace cspec
 {
@@ -19,55 +24,6 @@ namespace cspec
     unsigned int gSpecCount = 0;
     unsigned int gFailures = 0;
 
-    std::deque<Evaluation*> Evaluation::sTests;
-
-    Evaluation::Evaluation(char const* test_name) : Name(test_name)
-    {
-        sTests.push_back(this);
-    }
-
-    void Evaluation::Run()
-    {
-        std::sort(sTests.begin(), sTests.end(), [](Evaluation* a, Evaluation* b) -> bool {
-            return strcmp(a->Name, b->Name) < 0;
-        });
-
-        cspec::print("Running ", sTests.size(), " evaluations\n");
-        for (auto& test : sTests) {
-            cspec::print('\n', "Evaluating: ", "\x1b[35m", test->Name, '\n');
-            test->body();
-        }
-    }
-}  // namespace cspec
-
-namespace
-{
-    std::deque<cspec::TestBlock*> gRunningTests;
-    cspec::TestBlock* gRunningTest = nullptr;
-
-    void appendCurrentTestStack()
-    {
-        std::stringstream ss;
-
-        // TODO disabled until described & contexts can be nested properly
-
-        // ss << "\n\n--------------------------------------\n\n\n";
-        // int tabcount = 0;
-        // for (const auto& test : gRunningTests) {
-        //    for (int i = 0; i < tabcount; i++) {
-        //	ss << TAB_STR;
-        //    }
-        //    ss << test->Desc << '\n';
-        //    tabcount++;
-        //}
-
-        ss << cspec::captures();
-        cspec::capture(ss.str());
-    }
-}  // namespace
-
-namespace cspec
-{
     void RunTest(TestBlock& test)
     {
         try {
@@ -116,7 +72,6 @@ namespace cspec
         if (gItFailed) {
             gFailures++;
             gItFailed = false;
-            appendCurrentTestStack();
             print("\x1b[31m", "\u00D7");
         } else {
             print("\x1b[32m", "\u2022");

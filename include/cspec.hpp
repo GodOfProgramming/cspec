@@ -1,24 +1,11 @@
 #pragma once
-#include <functional>
-#include <memory>
-#include <vector>
-#include <deque>
 #include <unordered_map>
+#include <vector>
+#include "evaluation.hpp"
 #include "expectation.hpp"
 #include "exceptions.hpp"
 #include "blocks.hpp"
-
-#define Eval(test_name)                                                         \
-    class _test_##test_name##_ : public cspec::Evaluation                        \
-    {                                                                           \
-       public:                                                                  \
-        _test_##test_name##_();                                                 \
-        void body() override;                                                   \
-    };                                                                          \
-    _test_##test_name##_ _var_##test_name##_;                                   \
-    _test_##test_name##_::_test_##test_name##_() : cspec::Evaluation(#test_name) \
-    {}                                                                          \
-    void _test_##test_name##_::body()
+#include "benchmark.hpp"
 
 #define Describe cspec::_Describe_
 #define Context cspec::_Context_
@@ -33,21 +20,6 @@ extern std::vector<const char*> ARGV;
 
 namespace cspec
 {
-    class Evaluation
-    {
-       public:
-        Evaluation(char const* test_name);
-
-	static void Run();
-
-        virtual void body() = 0;
-
-        char const* Name;
-
-       private:
-        static std::deque<Evaluation*> sTests;
-    };
-
     extern unsigned int gSpecCount;
     extern unsigned int gFailures;
 

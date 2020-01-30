@@ -1,5 +1,4 @@
 #include "cspec.hpp"
-#include "benchmark.hpp"
 
 extern char** environ;
 std::unordered_map<std::string, std::string> ENV;
