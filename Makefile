@@ -1,5 +1,5 @@
 CXX		:= g++
-CXX_FLAGS 	:= -Wall -Wextra -std=c++17 -O3 
+CXX_FLAGS 	:= -Wall -Wextra -std=c++17 -O3 -funroll-loops
 
 AR		:= ar
 AR_ARGS		:= rvs
@@ -29,6 +29,7 @@ LIB_DIRS	:= -L.
 
 INSTALL_DIR	:= /usr/local/lib64
 
+.PHONY: all
 all: 				\
     $(BIN)			\
     $(OBJ)			\
@@ -37,14 +38,9 @@ all: 				\
     $(BIN)/$(EXECUTABLE).static \
     $(BIN)/$(EXECUTABLE).shared
 
+.PHONY: install
 install: all
-	@if [ -d $(INSTALL_DIR) ]; then 			\
-	    echo "Installing into $(INSTALL_DIR)"; 		\
-	    cp $(SHARED_LIBRARY) $(INSTALL_DIR);		\
-	    chmod 755 $(INSTALL_DIR)/$(SHARED_LIBRARY);		\
-	else 							\
-	    echo "'$(INSTALL_DIR)' does not exist, exiting"; 	\
-	fi
+	@SHARED_LIBRARY="$(SHARED_LIBRARY)" INSTALL_DIR="$(INSTALL_DIR)" /bin/bash install.sh
 
 .PHONY: force
 force: clean all
