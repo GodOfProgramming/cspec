@@ -78,6 +78,7 @@ clean:
 .PHONY: ci
 ci: install
 	@make check LD_LIBRARY_PATH="$(LD_LIBRARY_PATH):$(INSTALL_DIR)"
+	@echo "Passed!"
 
 ####################
 ### Common Tasks ###
