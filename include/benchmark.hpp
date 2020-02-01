@@ -38,4 +38,3 @@ namespace cspec
         static std::deque<Benchmark*> sBenchmarks;
     };
 }  // namespace cspec
-

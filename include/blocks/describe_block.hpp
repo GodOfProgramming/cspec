@@ -13,4 +13,3 @@ namespace cspec
     inline DescribeBlock::DescribeBlock(const char* name, TestFunc test) : TestBlock(name, test)
     {}
 }  // namespace cspec
-

@@ -115,55 +115,55 @@ namespace cspec
     template <>
     inline std::string EvalHelper<char*, char*>::MessageEq()
     {
-	return StringEqHelper(e, v);
+        return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<char*, const char*>::MessageEq()
     {
-	return StringEqHelper(e, v);
+        return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<const char*, char*>::MessageEq()
     {
-	return StringEqHelper(e, v);
+        return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<const char*, const char*>::MessageEq()
     {
-	return StringEqHelper(e, v);
+        return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<std::string, std::string>::MessageEq()
     {
-	return StringEqHelper(e, v);
+        return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<std::string, char*>::MessageEq()
     {
-	return StringEqHelper(e, v);
+        return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<char*, std::string>::MessageEq()
     {
-	return StringEqHelper(e, v);
+        return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<std::string, const char*>::MessageEq()
     {
-	return StringEqHelper(e, v);
+        return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<const char*, std::string>::MessageEq()
     {
-	return StringEqHelper(e, v);
+        return StringEqHelper(e, v);
     }
 
     template <>

@@ -13,4 +13,3 @@ namespace cspec
     inline ContextBlock::ContextBlock(const char* name, TestFunc test) : TestBlock(name, test)
     {}
 }  // namespace cspec
-
