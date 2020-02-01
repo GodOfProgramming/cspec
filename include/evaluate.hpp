@@ -13,6 +13,18 @@ namespace
         ((ss << std::forward<Args>(args)), ...);
         return ss.str();
     }
+
+    template <typename S1, typename S2>
+    inline std::string StringEqHelper(const S1& s1, const S2& s2)
+    {
+        return FmtHelper("Expected '", s1, "' to equal '", s2, '\'');
+    }
+
+    template <typename S1, typename S2>
+    inline std::string StringNeqHelper(const S1& s1, const S2& s2)
+    {
+        return FmtHelper("Expected '", s1, "' not to equal '", s2, '\'');
+    }
 }  // namespace
 
 namespace cspec
@@ -40,25 +52,25 @@ namespace cspec
     template <typename E, typename V>
     inline std::string EvalHelper<E, V>::MessageEq()
     {
-        return FmtHelper("Expected ", e, " to equal ", v, '\n');
+        return FmtHelper("Expected ", e, " to equal ", v);
     }
 
     template <typename E, typename V>
     inline std::string EvalHelper<E, V>::MessageNeq()
     {
-        return FmtHelper("Expected ", e, " not to equal ", v, '\n');
+        return FmtHelper("Expected ", e, " not to equal ", v);
     }
 
     template <typename E, typename V>
     inline std::string EvalHelper<E, V>::MessageCon()
     {
-        return FmtHelper("Expected a container to contain ", v, '\n');
+        return FmtHelper("Expected a container to contain ", v);
     }
 
     template <typename E, typename V>
     inline std::string EvalHelper<E, V>::MessageNcon()
     {
-        return FmtHelper("Expected a container not to contain ", v, '\n');
+        return FmtHelper("Expected a container not to contain ", v);
     }
 
     template <typename E, typename V>
@@ -99,59 +111,59 @@ namespace cspec
     /********************************************************************/
 
     // Eq
-    
+
     template <>
     inline std::string EvalHelper<char*, char*>::MessageEq()
     {
-        return FmtHelper("Expected '", e, "' to equal '", v, "'\n");
+	return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<char*, const char*>::MessageEq()
     {
-        return FmtHelper("Expected '", e, "' to equal '", v, "'\n");
+	return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<const char*, char*>::MessageEq()
     {
-        return FmtHelper("Expected '", e, "' to equal '", v, "'\n");
+	return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<const char*, const char*>::MessageEq()
     {
-        return FmtHelper("Expected '", e, "' to equal '", v, "'\n");
+	return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<std::string, std::string>::MessageEq()
     {
-        return FmtHelper("Expected '", e, "' to equal '", v, "'\n");
+	return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<std::string, char*>::MessageEq()
     {
-        return FmtHelper("Expected '", e, "' to equal '", v, "'\n");
+	return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<char*, std::string>::MessageEq()
     {
-        return FmtHelper("Expected '", e, "' to equal '", v, "'\n");
+	return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<std::string, const char*>::MessageEq()
     {
-        return FmtHelper("Expected '", e, "' to equal '", v, "'\n");
+	return StringEqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<const char*, std::string>::MessageEq()
     {
-        return FmtHelper("Expected '", e, "' to equal '", v, "'\n");
+	return StringEqHelper(e, v);
     }
 
     template <>
@@ -165,55 +177,55 @@ namespace cspec
     template <>
     inline std::string EvalHelper<char*, char*>::MessageNeq()
     {
-        return FmtHelper("Expected '", e, "' not to equal '", v, "'\n");
+        return StringNeqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<char*, const char*>::MessageNeq()
     {
-        return FmtHelper("Expected '", e, "' not to equal '", v, "'\n");
+        return StringNeqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<const char*, char*>::MessageNeq()
     {
-        return FmtHelper("Expected '", e, "' not to equal '", v, "'\n");
+        return StringNeqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<const char*, const char*>::MessageNeq()
     {
-        return FmtHelper("Expected '", e, "' not to equal '", v, "'\n");
+        return StringNeqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<std::string, std::string>::MessageNeq()
     {
-        return FmtHelper("Expected '", e, "' not to equal '", v, "'\n");
+        return StringNeqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<std::string, char*>::MessageNeq()
     {
-        return FmtHelper("Expected '", e, "' not to equal '", v, "'\n");
+        return StringNeqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<char*, std::string>::MessageNeq()
     {
-        return FmtHelper("Expected '", e, "' not to equal '", v, "'\n");
+        return StringNeqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<std::string, const char*>::MessageNeq()
     {
-        return FmtHelper("Expected '", e, "' not to equal '", v, "'\n");
+        return StringNeqHelper(e, v);
     }
 
     template <>
     inline std::string EvalHelper<const char*, std::string>::MessageNeq()
     {
-        return FmtHelper("Expected '", e, "' not to equal '", v, "'\n");
+        return StringNeqHelper(e, v);
     }
 
     template <>
@@ -227,7 +239,7 @@ namespace cspec
     /********************************************************************/
 
     // Eq
-    
+
     template <>
     inline bool EvalHelper<char*, char*>::EvaluateEq()
     {
