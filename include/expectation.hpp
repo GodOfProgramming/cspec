@@ -1,6 +1,6 @@
 #pragma once
 #include "misc.hpp"
-#include "matchers.hpp"
+#include "evaluate.hpp"
 #include "string.h"
 
 namespace cspec
@@ -21,35 +21,41 @@ namespace cspec
         template <typename V, typename... Args>
         void toEqual(V value, Args&&... args)
         {
-            matchers::ToEqual<E, V> matcher;
-            checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
+            EvalHelper<E, V> helper(mExpectation, value);
+            perform(helper.EvaluateEq(), helper.MessageEq(), args...);
         }
 
         template <typename V, typename... Args>
         void notToEqual(V value, Args&&... args)
         {
-            matchers::NotToEqual<E, V> matcher;
-            checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
+            EvalHelper<E, V> helper(mExpectation, value);
+            perform(helper.EvaluateNeq(), helper.MessageNeq(), args...);
         }
 
         template <typename V, typename... Args>
         void toContain(V value, Args&&... args)
         {
-            matchers::ToContain<E, V> matcher;
-            checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
+            EvalHelper<E, V> helper(mExpectation, value);
+            perform(helper.EvaluateCon(), helper.MessageCon(), args...);
         }
 
         template <typename V, typename... Args>
         void notToContain(V value, Args&&... args)
         {
-            matchers::NotToContain<E, V> matcher;
-            checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
+            EvalHelper<E, V> helper(mExpectation, value);
+            perform(helper.EvaluateNcon(), helper.MessageNcon(), args...);
         }
 
        private:
-        E mExpectation;
+        E& mExpectation;
         const char* mFile;
         int mLine;
+
+        template <typename... Args>
+        void perform(bool result, std::string message, Args&&... args)
+        {
+            checkResult(result, message, '\n', '\n', args...);
+        }
 
         template <typename... Args>
         void checkResult(bool res, Args&&... args)

@@ -75,24 +75,11 @@ std::ostream& operator<<(std::ostream& os, const Test& t)
  */
 namespace cspec
 {
-    namespace matchers
+    template <>
+    inline bool EvalHelper<::Test, ::Test>::EvaluateEq()
     {
-        template <>
-        struct ToEqual<::Test, ::Test>
-        {
-            bool operator()(::Test expectation, ::Test value)
-            {
-                if (expectation.equals(value)) {
-                    return true;
-                } else {
-                    Message = ToEqualDefaultMessage(expectation, value);
-                    return false;
-                }
-            }
-
-            std::string Message;
-        };
-    }  // namespace matchers
+        return e.equals(v);
+    }
 }  // namespace cspec
 
 Eval(ClassSpec)
