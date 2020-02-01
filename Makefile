@@ -1,3 +1,7 @@
+#################
+### Variables ###
+#################
+
 CXX		:= g++
 CXX_FLAGS 	:= -Wall -Wextra -std=c++17 -O3 -funroll-loops
 
@@ -29,10 +33,12 @@ LIB_DIRS	:= -L.
 
 INSTALL_DIR	:= /usr/local/lib64
 
+################
+### Targets  ###
+################
+
 .PHONY: all
-all: 				\
-    $(BIN)			\
-    $(OBJ)			\
+all: setup			\
     $(STATIC_LIBRARY) 		\
     $(SHARED_LIBRARY)		\
     $(BIN)/$(EXECUTABLE).static \
@@ -44,6 +50,24 @@ install: all
 
 .PHONY: force
 force: clean all
+
+.PHONY: check
+check: test-static test-shared
+
+.PHONY: test-static
+test-static: $(BIN)/$(EXECUTABLE).static
+	@echo "Testing static..." && $< > /dev/null && echo "Passed!"
+
+.PHONY: test-shared
+test-shared: $(BIN)/$(EXECUTABLE).shared
+	@echo "Testing shared..." && $< > /dev/null && echo "Passed!"
+
+.PHONY: setup
+setup: $(BIN) $(OBJ)
+
+.PHONY: clean
+clean:
+	-@rm -rf $(SHARED_LIBRARY) $(STATIC_LIBRARY) $(BIN) $(OBJ)
 
 ####################
 ### Common Tasks ###
@@ -84,8 +108,4 @@ $(BIN):
 
 $(OBJ):
 	-@mkdir -p $@
-
-.PHONY: clean
-clean:
-	-@rm -rf $(SHARED_LIBRARY) $(STATIC_LIBRARY) $(BIN) $(OBJ)
 
