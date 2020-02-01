@@ -47,7 +47,7 @@ namespace cspec
         }
 
        private:
-        E& mExpectation;
+        E mExpectation;
         const char* mFile;
         int mLine;
 
