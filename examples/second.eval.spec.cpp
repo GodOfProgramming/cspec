@@ -6,8 +6,9 @@ Eval(spec3)
         It("Fails so I can see the output", [] {
             auto a = "foo";
             auto b = "bar";
-            Expect(a).toEqual(b);
-	    Expect(b).toEqual(a);
+            Expect(a).toEqual(b, "intentional failure");
+	    Expect(true).toEqual(false, "intentional failure");
+	    Expect(false).toEqual(true, "intentional failure");
         });
 
 	Expect("this should trigger a InvalidExpectationException").toEqual("");

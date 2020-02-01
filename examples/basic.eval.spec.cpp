@@ -44,12 +44,12 @@ Eval(spec1)
 
             It("strings are identical but not the same address", [&] {
                 Expect(str1).toEqual(str2);
-                // Expect(str1).toEqual("hello");
-                // Expect("hello").toEqual(str2);
-                // Expect(str1).notToEqual(str3);
-                // Expect(str1).notToEqual("world");
-                // Expect("world").notToEqual(str2);
-                // Expect((size_t)&str1[0]).notToEqual((size_t)&str2[0]);
+                Expect(str1).toEqual("hello");
+                Expect("hello").toEqual(str2);
+                Expect(str1).notToEqual(str3);
+                Expect(str1).notToEqual("world");
+                Expect("world").notToEqual(str2);
+                Expect((size_t)&str1[0]).notToEqual((size_t)&str2[0]);
             });
         });
     });
