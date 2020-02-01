@@ -169,7 +169,7 @@ namespace cspec
     template <>
     inline std::string EvalHelper<bool, bool>::MessageEq()
     {
-        return FmtHelper("Expected ", e ? "true" : "false", " to equal ", v ? "true" : "false", '\n');
+        return FmtHelper("Expected ", e ? "true" : "false", " to equal ", v ? "true" : "false");
     }
 
     // Neq
@@ -231,7 +231,7 @@ namespace cspec
     template <>
     inline std::string EvalHelper<bool, bool>::MessageNeq()
     {
-        return FmtHelper("Expected ", e ? "true" : "false", " not to equal ", v ? "true" : "false", '\n');
+        return FmtHelper("Expected ", e ? "true" : "false", " not to equal ", v ? "true" : "false");
     }
 
     /********************************************************************/
