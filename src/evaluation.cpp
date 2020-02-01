@@ -21,7 +21,8 @@ namespace cspec
 
         cspec::print("Running ", sTests.size(), " evaluations\n");
         for (auto& test : sTests) {
-            cspec::print('\n', "Evaluating: ", "\x1b[35m", test->Name, '\n');
+            cspec::print('\n', "Evaluating: ", "\x1b[35m", test->Name);
+	    std::cout << std::endl;
             test->body();
         }
     }

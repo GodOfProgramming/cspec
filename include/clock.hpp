@@ -74,4 +74,4 @@ namespace cspec
     {
         mNow = InternalClock::now();
     }
-}  // namespace epoch
+}  // namespace cspec

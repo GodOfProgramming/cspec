@@ -1,6 +1,6 @@
 #pragma once
 #include "misc.hpp"
-#include "matchers.hpp"
+#include "evaluate.hpp"
 #include "string.h"
 
 namespace cspec
@@ -8,7 +8,6 @@ namespace cspec
     extern bool gInItBlock;
     extern bool gItFailed;
 
-    /* Can also be specialized if needed and won't break anything as long as you follow similar logic */
     template <typename E>
     class Expectation
     {
@@ -21,29 +20,29 @@ namespace cspec
         template <typename V, typename... Args>
         void toEqual(V value, Args&&... args)
         {
-            matchers::ToEqual<E, V> matcher;
-            checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
+            EvalHelper<E, V> helper(mExpectation, value);
+            checkResult(helper.EvaluateEq(), helper.MessageEq(), args...);
         }
 
         template <typename V, typename... Args>
         void notToEqual(V value, Args&&... args)
         {
-            matchers::NotToEqual<E, V> matcher;
-            checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
+            EvalHelper<E, V> helper(mExpectation, value);
+            checkResult(helper.EvaluateNeq(), helper.MessageNeq(), args...);
         }
 
         template <typename V, typename... Args>
         void toContain(V value, Args&&... args)
         {
-            matchers::ToContain<E, V> matcher;
-            checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
+            EvalHelper<E, V> helper(mExpectation, value);
+            checkResult(helper.EvaluateCon(), helper.MessageCon(), args...);
         }
 
         template <typename V, typename... Args>
         void notToContain(V value, Args&&... args)
         {
-            matchers::NotToContain<E, V> matcher;
-            checkResult(matcher(mExpectation, value), matcher.Message, '\n', '\n', args...);
+            EvalHelper<E, V> helper(mExpectation, value);
+            checkResult(helper.EvaluateNcon(), helper.MessageNcon(), args...);
         }
 
        private:
@@ -52,10 +51,13 @@ namespace cspec
         int mLine;
 
         template <typename... Args>
-        void checkResult(bool res, Args&&... args)
+        void checkResult(bool res, std::string failure_message, Args&&... args)
         {
             if (!res) {
-                capture('\n', mFile, " (", mLine, "): ", "\x1b[31m", "Evaluation Failed\n\t", "\x1b[m", args...);
+                capture('\n', mFile, " (", mLine, "): ", "\x1b[31m", "Evaluation Failed\n\t", "\x1b[m", failure_message, '\n');
+                if (sizeof...(args) > 0) {
+                    capture("\tMessage: ", args..., '\n');
+                }
                 gItFailed = true;
             }
         }

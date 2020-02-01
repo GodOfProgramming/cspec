@@ -26,4 +26,3 @@ namespace cspec
         return capts;
     }
 }  // namespace cspec
-
