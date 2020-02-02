@@ -2,45 +2,45 @@
 ### Variables ###
 #################
 
-CXX		:= g++
-CXX_FLAGS 	:= -Wall -Wextra -std=c++17 -O3 -funroll-loops
+CXX					:= g++
+CXX_FLAGS 			:= -Wall -Wextra -std=c++17 -O3 -funroll-loops
 
-AR		:= ar
-AR_ARGS		:= rvs
+AR					:= ar
+AR_ARGS				:= rvs
 
-BIN		:= bin
-OBJ		:= obj
+BIN					:= bin
+OBJ					:= obj
 
-SRC		:= src
-INCLUDE		:= include
-EXAMPLES	:= examples
+SRC					:= src
+INCLUDE				:= include
+EXAMPLES			:= examples
 
-SRC_FILES	:= $(wildcard $(SRC)/*.cpp)
-OBJ_FILES	:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRC_FILES))
+SRC_FILES			:= $(wildcard $(SRC)/*.cpp)
+OBJ_FILES			:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRC_FILES))
 
 EXAMPLE_SRC_FILES	:= $(wildcard $(EXAMPLES)/*.cpp)
 EXAMPLE_OBJ_FILES 	:= $(patsubst $(EXAMPLES)/%.cpp, $(OBJ)/%.o, $(EXAMPLE_SRC_FILES))
 
-LIB_NAME	:= libcspec
-STATIC_LIBRARY	:= $(LIB_NAME).a
-SHARED_LIBRARY	:= $(LIB_NAME).so
-EXECUTABLE	:= spec
-EXE_STATIC	:= $(EXECUTABLE).static
-EXE_SHARED	:= $(EXECUTABLE).shared
+LIB_NAME			:= libcspec
+STATIC_LIBRARY		:= $(LIB_NAME).a
+SHARED_LIBRARY		:= $(LIB_NAME).so
+EXECUTABLE			:= spec
+EXE_STATIC			:= $(EXECUTABLE).static
+EXE_SHARED			:= $(EXECUTABLE).shared
 
-SHARED_LIBS	:= -lcspec
-STATIC_LIBS	:= $(STATIC_LIBRARY)
+SHARED_LIBS			:= -lcspec
+STATIC_LIBS			:= $(STATIC_LIBRARY)
 
-LIB_DIRS	:= -L.
+LIB_DIRS			:= -L.
 
-INSTALL_DIR	:= /usr/local/lib64
+INSTALL_DIR			:= /usr/local/lib64
 
 ################
 ### Targets  ###
 ################
 
 .PHONY: all
-all: setup			\
+all: setup					\
     $(STATIC_LIBRARY) 		\
     $(SHARED_LIBRARY)		\
     $(BIN)/$(EXE_STATIC) 	\
