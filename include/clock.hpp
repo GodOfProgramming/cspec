@@ -1,77 +1,82 @@
 #pragma once
-
 #include <chrono>
 
 namespace cspec
 {
 #if defined _WIN32
-    using Instant = std::chrono::steady_clock::time_point;
+	using Instant = std::chrono::steady_clock::time_point;
 #elif defined __linux__
-    using Instant = std::chrono::system_clock::time_point;
+	using Instant = std::chrono::system_clock::time_point;
 #endif
 
-    using InternalClock = std::chrono::high_resolution_clock;
-    using Nanosecond = std::chrono::nanoseconds;
-    using Microsecond = std::chrono::microseconds;
-    using Millisecond = std::chrono::milliseconds;
-    using Second = std::chrono::seconds;
+	using InternalClock = std::chrono::high_resolution_clock;
+	using Nanosecond = std::chrono::nanoseconds;
+	using Microsecond = std::chrono::microseconds;
+	using Millisecond = std::chrono::milliseconds;
+	using Second = std::chrono::seconds;
 
-    class Clock
-    {
-       public:
-        Clock() = default;
+	class Clock
+	{
+	public:
+		Clock() = default;
 
-        /* Timestamps the clock */
-        void reset();
+		/* Timestamps the clock */
+		void reset();
 
-        /* Get how much time as elasped since starting */
-        template <typename UnitOfTime>
-        double elapsed();
+		/* Get how much time as elasped since starting */
+		template <typename UnitOfTime>
+		double elapsed();
 
-        /* Check if a time duration has passed */
-        template <typename UnitOfTime>
-        bool elapsed(double value)
-        {
-            return std::chrono::duration_cast<UnitOfTime>(InternalClock::now() - mNow).count() >= value;
-        }
+		/* Check if a time duration has passed */
+		template <typename UnitOfTime>
+		bool elapsed(double value);
 
-       private:
-        Instant mNow;
-        size_t mDelta;
+	private:
+		Instant mNow;
+		size_t mDelta;
 
-        template <typename T>
-        double diff()
-        {
-            return std::chrono::duration<double, T>(InternalClock::now() - mNow).count();
-        }
-    };
+		template <typename T>
+		double diff();
+	};
 
-    template <>
-    inline double Clock::elapsed<Nanosecond>()
-    {
-        return diff<std::nano>();
-    }
+	inline void Clock::reset()
+	{
+		mNow = InternalClock::now();
+	}
 
-    template <>
-    inline double Clock::elapsed<Microsecond>()
-    {
-        return diff<std::micro>();
-    }
+	template <>
+	inline double Clock::elapsed<Nanosecond>()
+	{
+		return diff<std::nano>();
+	}
 
-    template <>
-    inline double Clock::elapsed<Millisecond>()
-    {
-        return diff<std::milli>();
-    }
+	template <>
+	inline double Clock::elapsed<Microsecond>()
+	{
+		return diff<std::micro>();
+	}
 
-    template <>
-    inline double Clock::elapsed<Second>()
-    {
-        return diff<std::ratio<1>>();
-    }
+	template <>
+	inline double Clock::elapsed<Millisecond>()
+	{
+		return diff<std::milli>();
+	}
 
-    inline void Clock::reset()
-    {
-        mNow = InternalClock::now();
-    }
-}  // namespace cspec
+	template <>
+	inline double Clock::elapsed<Second>()
+	{
+		return diff<std::ratio<1>>();
+	}
+
+	template <typename UnitOfTime>
+	inline bool Clock::elapsed(double value)
+	{
+		return std::chrono::duration_cast<UnitOfTime>(InternalClock::now() - mNow).count() >= value;
+	}
+
+	template <typename T>
+	inline double Clock::diff()
+	{
+		return std::chrono::duration<double, T>(InternalClock::now() - mNow).count();
+	}
+}  // namespace epoch

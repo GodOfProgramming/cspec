@@ -15,25 +15,30 @@ SRC					:= src
 INCLUDE				:= include
 EXAMPLES			:= examples
 
-SRC_FILES			:= $(wildcard $(SRC)/*.cpp)
-OBJ_FILES			:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRC_FILES))
-
-EXAMPLE_SRC_FILES	:= $(wildcard $(EXAMPLES)/*.cpp)
-EXAMPLE_OBJ_FILES 	:= $(patsubst $(EXAMPLES)/%.cpp, $(OBJ)/%.o, $(EXAMPLE_SRC_FILES))
+INSTALL_DIR			:= /usr/local/lib64
 
 LIB_NAME			:= libcspec
 STATIC_LIBRARY		:= $(LIB_NAME).a
 SHARED_LIBRARY		:= $(LIB_NAME).so
+
 EXECUTABLE			:= spec
 EXE_STATIC			:= $(EXECUTABLE).static
 EXE_SHARED			:= $(EXECUTABLE).shared
 
-SHARED_LIBS			:= -lcspec
-STATIC_LIBS			:= $(STATIC_LIBRARY)
+SRC_FILES			:= $(wildcard $(SRC)/*.cpp)
+OBJ_FILES			:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRC_FILES))
+DEP_FILES			:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.d, $(SRC_FILES))
+
+EXAMPLE_SRC_FILES	:= $(wildcard $(EXAMPLES)/*.cpp)
+EXAMPLE_OBJ_FILES 	:= $(patsubst $(EXAMPLES)/%.cpp, $(OBJ)/%.o, $(EXAMPLE_SRC_FILES))
+EXAMPLE_DEP_FILES 	:= $(patsubst $(EXAMPLES)/%.cpp, $(OBJ)/%.d, $(EXAMPLE_SRC_FILES))
+
+OBJECTS				:= $(OBJ_FILES) $(EXAMPLE_OBJ_FILES)
+DEPENDENCIES		:= $(DEP_FILES) $(EXAMPLE_DEP_FILES)
 
 LIB_DIRS			:= -L.
-
-INSTALL_DIR			:= /usr/local/lib64
+SHARED_LIBS			:= -lcspec
+STATIC_LIBS			:= $(STATIC_LIBRARY)
 
 ################
 ### Targets  ###
@@ -73,22 +78,24 @@ force: clean all
 
 .PHONY: clean
 clean:
-	-@rm -rf $(SHARED_LIBRARY) $(STATIC_LIBRARY) $(BIN) $(OBJ)
+	-@rm -f $(SHARED_LIBRARY) $(STATIC_LIBRARY) $(OBJECTS) $(DEPENDENCIES)
 
 .PHONY: ci
 ci: install
 	@make check LD_LIBRARY_PATH="$(LD_LIBRARY_PATH):$(INSTALL_DIR)"
 	@echo "Passed!"
 
+-include $(DEPENDENCIES)
+
 ####################
 ### Common Tasks ###
 ####################
 
 $(OBJ)/%.o: $(SRC)/%.cpp
-	$(CXX) $(CXX_FLAGS) -c -fPIC -I$(INCLUDE) $< -o $@
+	$(CXX) $(CXX_FLAGS) -c -fPIC -MMD -MP -I$(INCLUDE) $< -o $@
 
 $(OBJ)/%.spec.o: $(EXAMPLES)/%.spec.cpp
-	$(CXX) $(CXX_FLAGS) -c -I$(INCLUDE) $< -o $@
+	$(CXX) $(CXX_FLAGS) -c -MMD -MP -I$(INCLUDE) $< -o $@
 
 ######################
 ### Static Library ###
