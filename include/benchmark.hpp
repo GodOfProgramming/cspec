@@ -17,7 +17,7 @@
 
 #define Do(times)  \
     Timer.reset(); \
-    for (int i = 0; i < times; i++)
+    for (unsigned long i = 0u; i < times; i++)
 
 extern cspec::Clock Timer;
 
