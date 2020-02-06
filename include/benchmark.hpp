@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <deque>
 
 #include "clock.hpp"
@@ -35,6 +36,6 @@ namespace cspec
         virtual void body() = 0;
 
        private:
-        static std::deque<Benchmark*> sBenchmarks;
+		static std::unique_ptr<std::deque<Benchmark*>> sBenchmarks;
     };
 }  // namespace cspec

@@ -4,22 +4,32 @@
 
 cspec::Clock Timer;
 
+namespace
+{
+	bool gBenchmarkInitalized = false;
+}
+
 namespace cspec
 {
-    std::deque<Benchmark*> Benchmark::sBenchmarks;
+	std::unique_ptr<std::deque<Benchmark*>> Benchmark::sBenchmarks;
 
-    Benchmark::Benchmark(const char* name) : Name(name)
-    {
-        sBenchmarks.push_back(this);
-    }
+	Benchmark::Benchmark(const char* name): Name(name)
+	{
+		if (!gBenchmarkInitalized) {
+			sBenchmarks = std::make_unique<std::deque<Benchmark*>>();
+			gBenchmarkInitalized = true;
+		}
 
-    void Benchmark::Run()
-    {
-        std::cout << "Running " << sBenchmarks.size() << " benchmarks\n";
-        for (auto benchmark : sBenchmarks) {
-            std::cout << "\n\n" << benchmark->Name << "\n\n";
-            benchmark->body();
-        }
-    }
+		sBenchmarks->push_back(this);
+	}
+
+	void Benchmark::Run()
+	{
+		std::cout << "Running " << sBenchmarks->size() << " benchmarks\n";
+		for (auto benchmark : *sBenchmarks) {
+			std::cout << "\n\n" << benchmark->Name << "\n\n";
+			benchmark->body();
+		}
+	}
 }  // namespace cspec
 

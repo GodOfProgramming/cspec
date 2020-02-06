@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <deque>
 
 #define Eval(test_name)                                                          \
@@ -28,6 +29,6 @@ namespace cspec
         char const* Name;
 
        private:
-        static std::deque<Evaluation*> sTests;
+        static std::unique_ptr<std::deque<Evaluation*>> sTests;
     };
 }  // namespace cspec
