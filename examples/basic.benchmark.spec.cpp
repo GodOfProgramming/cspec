@@ -7,24 +7,61 @@
 
 Bench(something)
 {
-    Do(100)
-    {
-        char* arr = (char*)malloc(sizeof(char) * 128);
-        memset(arr, 0, sizeof(char) * 128);
-        free(arr);
-    }
+  const auto reps = 1000000;
+  const auto array_size = 16384;
 
-    auto ctime = Timer.elapsed<cspec::Microsecond>() / 100;
+  Do(reps)
+  {
+    char* arr = (char*)malloc(sizeof(char) * array_size);
+    memset(arr, 0, sizeof(char) * array_size);
+    free(arr);
+  }
 
-    Do(100)
-    {
-        char* arr = new char[128];
-        std::fill(arr, arr + 128, 0);
-        delete[] arr;
-    }
+  auto ctime = Timer.elapsed<cspec::Microsecond>() / reps;
 
-    auto cpptime = Timer.elapsed<cspec::Microsecond>() / 100;
+  Do(reps)
+  {
+    char* arr = new char[array_size];
+    std::fill(arr, arr + array_size, 0);
+    delete[] arr;
+  }
 
-    std::cout << "ctime: " << ctime << '\n';
-    std::cout << "cpptime: " << cpptime << '\n';
+  auto cpptime = Timer.elapsed<cspec::Microsecond>() / reps;
+
+  std::cout << "ctime: " << ctime << '\n';
+  std::cout << "cpptime: " << cpptime << '\n';
 }
+
+Bench(another)
+{
+  const auto reps = 100000;
+  const auto array_size = 16384;
+
+  {
+    char src[array_size];
+    char dst[array_size];
+
+    Do(reps)
+    {
+      memcpy(dst, src, sizeof(src));
+    }
+  }
+
+  auto ctime = Timer.elapsed<cspec::Nanosecond>() / reps;
+
+  {
+    std::array<char, array_size> src;
+    std::array<char, array_size> dst;
+
+    Do(reps)
+    {
+      std::copy(src.begin(), src.end(), dst.begin());
+    }
+  }
+
+  auto cpptime = Timer.elapsed<cspec::Nanosecond>() / reps;
+
+  std::cout << "ctime: " << ctime << '\n';
+  std::cout << "cpptime: " << cpptime << '\n';
+}
+
