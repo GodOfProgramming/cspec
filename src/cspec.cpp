@@ -5,6 +5,7 @@
 #include "blocks.hpp"
 #include "exceptions.hpp"
 #include "expectation.hpp"
+#include "failable.hpp"
 
 namespace
 {
@@ -18,7 +19,6 @@ namespace cspec
     std::stringstream gFailureMessages;
 
     bool gInItBlock = false;
-    bool gItFailed = false;
 
     unsigned int gSpecCount = 0;
     unsigned int gFailures = 0;
@@ -68,12 +68,12 @@ namespace cspec
 
         gSpecCount++;
 
-        if (gItFailed) {
+        if (Failable::ItFailed) {
             gFailures++;
-            gItFailed = false;
-            print("\x1b[31m", "\u00D7");
+			Failable::ItFailed = false;
+            print("\x1b[31m\u00D7");
         } else {
-            print("\x1b[32m", "\u2022");
+            print("\x1b[32m\u2022");
         }
 
         gRunningTests.pop_back();
