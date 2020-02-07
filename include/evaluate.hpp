@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iostream>
 #include <typeinfo>
+#include "util/demangle.hpp"
 
 namespace
 {
@@ -56,25 +57,25 @@ namespace cspec
   template <typename E, typename V>
   inline std::string EvalHelper<E, V>::MessageEq()
   {
-    return FmtHelper("Expected ", e, ": ", typeid(E).name(), " to equal ", v, ": ", typeid(v).name());
+    return FmtHelper("Expected ", e, ": ", type(e), " to equal ", v, ": ", type(v));
   }
 
   template <typename E, typename V>
   inline std::string EvalHelper<E, V>::MessageNeq()
   {
-    return FmtHelper("Expected ", e, ": ", typeid(E).name(), " not to equal ", v, ": ", typeid(v).name());
+    return FmtHelper("Expected ", e, ": ", type(e), " not to equal ", v, ": ", type(v));
   }
 
   template <typename E, typename V>
   inline std::string EvalHelper<E, V>::MessageCon()
   {
-    return FmtHelper("Expected a ", typeid(E).name(), " to contain ", v);
+    return FmtHelper("Expected ", type(e), " to contain ", v, ": ", type(v));
   }
 
   template <typename E, typename V>
   inline std::string EvalHelper<E, V>::MessageNcon()
   {
-    return FmtHelper("Expected a ", typeid(E).name(), " not to contain ", v);
+    return FmtHelper("Expected ", type(e), " not to contain ", v, ": ", type(v));
   }
 
   template <typename E, typename V>
@@ -82,7 +83,7 @@ namespace cspec
   {
     auto a = std::get<0>(v);
     auto b = std::get<1>(v);
-    return FmtHelper("Expected ", e, ": ", typeid(E).name(), " to be between ", a, ": ", typeid(V).name(), " and ", b, ": ", typeid(V).name());
+    return FmtHelper("Expected ", e, ": ", type(e), " to be between ", a, ": ", type(a), " and ", b, ": ", type(b));
   }
 
   template <typename E, typename V>
@@ -90,7 +91,7 @@ namespace cspec
   {
     auto a = std::get<0>(v);
     auto b = std::get<1>(v);
-    return FmtHelper("Expected ", e, " not to be between ", a, " and ", b);
+    return FmtHelper("Expected ", e, ": ", type(e), " not to be between ", a, ": ", type(a), " and ", b, ": ", type(b));
   }
 
   template <typename E, typename V>
