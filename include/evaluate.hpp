@@ -56,13 +56,13 @@ namespace cspec
   template <typename E, typename V>
   inline std::string EvalHelper<E, V>::MessageEq()
   {
-    return FmtHelper("Expected ", e, " to equal ", v);
+    return FmtHelper("Expected ", e, ": ", typeid(E).name(), " to equal ", v, ": ", typeid(v).name());
   }
 
   template <typename E, typename V>
   inline std::string EvalHelper<E, V>::MessageNeq()
   {
-    return FmtHelper("Expected ", e, " not to equal ", v);
+    return FmtHelper("Expected ", e, ": ", typeid(E).name(), " not to equal ", v, ": ", typeid(v).name());
   }
 
   template <typename E, typename V>
@@ -74,7 +74,7 @@ namespace cspec
   template <typename E, typename V>
   inline std::string EvalHelper<E, V>::MessageNcon()
   {
-    return FmtHelper("Expected a ", typeid(E).name()," not to contain ", v);
+    return FmtHelper("Expected a ", typeid(E).name(), " not to contain ", v);
   }
 
   template <typename E, typename V>
@@ -82,7 +82,7 @@ namespace cspec
   {
     auto a = std::get<0>(v);
     auto b = std::get<1>(v);
-    return FmtHelper("Expected ", e, " to be between ", a, " and ", b);
+    return FmtHelper("Expected ", e, ": ", typeid(E).name(), " to be between ", a, ": ", typeid(V).name(), " and ", b, ": ", typeid(V).name());
   }
 
   template <typename E, typename V>
@@ -138,7 +138,7 @@ namespace cspec
   template <typename E, typename V>
   inline bool EvalHelper<E, V>::EvaluateNotBetween()
   {
-	  return !EvaluateBetween();
+    return !EvaluateBetween();
   }
 
   /********************************************************************/
