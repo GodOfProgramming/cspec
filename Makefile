@@ -15,7 +15,7 @@ SRC					:= src
 INCLUDE				:= include
 EXAMPLES			:= examples
 
-INSTALL_DIR			:= /usr/local/lib64
+INSTALL_DIR			:= /usr/local/lib
 
 LIB_NAME			:= libcspec
 STATIC_LIBRARY		:= $(LIB_NAME).a
