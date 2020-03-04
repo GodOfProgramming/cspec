@@ -4,6 +4,81 @@
 #include <array>
 #include <cstdlib>
 #include <cstring>
+#include <unordered_map>
+#include <deque>
+
+[[gnu::always_inline]] inline void iterate(std::unordered_map<int, int>& map)
+{
+  asm("");
+  for (const auto& pair : map) {
+    (void)pair;
+    // do nothing
+  }
+}
+
+[[gnu::always_inline]] inline void iterate(std::deque<int>& deque)
+{
+  asm("");
+  for (const auto& num : deque) {
+    (void)num;
+    // do nothing
+  }
+}
+
+[[gnu::always_inline]] inline void iterate(std::array<int, 1024>& arr)
+{
+  asm("");
+  for (const auto& num : arr) {
+    (void)num;
+  }
+}
+
+Bench(unordered_map_vs_array_iteration)
+{
+  const auto reps = 10000000;
+  const auto size = 1024;
+
+  std::unordered_map<int, int> map;
+  map.reserve(size);
+  std::array<int, size> arr;
+  std::deque<int> deque;
+
+  for (int i = 0; i < size; i++) {
+    map[i] = i;
+    arr[i] = i;
+    deque.push_back(i);
+  }
+
+  {
+    Do(reps)
+    {
+      iterate(map);
+    }
+
+    const auto elapsed = Timer.elapsed<cspec::Nanosecond>() / reps;
+    std::cout << "Map: " << elapsed << '\n';
+  }
+
+  {
+    Do(reps)
+    {
+      iterate(deque);
+    }
+
+    const auto elapsed = Timer.elapsed<cspec::Nanosecond>() / reps;
+    std::cout << "Deque: " << elapsed << '\n';
+  }
+
+  {
+    Do(reps)
+    {
+      iterate(arr);
+    }
+
+    const auto elapsed = Timer.elapsed<cspec::Nanosecond>() / reps;
+    std::cout << "Arr: " << elapsed << '\n';
+  }
+}
 
 Bench(something)
 {

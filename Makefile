@@ -48,8 +48,9 @@ STATIC_LIBS			:= $(STATIC_LIBRARY)
 all: setup					\
     $(STATIC_LIBRARY) 		\
     $(SHARED_LIBRARY)		\
-    $(BIN)/$(EXE_STATIC) 	\
-    $(BIN)/$(EXE_SHARED)
+
+.PHONY: examples
+examples: all $(BIN)/$(EXE_STATIC) $(BIN)/$(EXE_SHARED)
 
 .PHONY: setup
 setup: $(BIN) $(OBJ)
