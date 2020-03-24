@@ -1,6 +1,6 @@
 #include <unordered_map>
 #include <vector>
-#include "cspec.hpp"
+#include <cspec/cspec.hpp>
 
 Eval(contains_spec)
 {

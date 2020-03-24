@@ -2,51 +2,52 @@
 ### Variables ###
 #################
 
-CXX					:= g++
-CXX_FLAGS 			:= -Wall -Wextra -std=c++17 -O3 -funroll-loops
+CXX									:= g++
+CXX_FLAGS 					:= -Wall -Wextra -std=c++17 -O3 -funroll-loops
 
-AR					:= ar
-AR_ARGS				:= rvs
+AR									:= ar
+AR_ARGS							:= rvs
 
-BIN					:= bin
-OBJ					:= obj
+BIN									:= bin
+OBJ									:= obj
 
-SRC					:= src
-INCLUDE				:= include
-EXAMPLES			:= examples
+SRC									:= src
+INCLUDE							:= include
+EXAMPLES						:= examples
 
-INSTALL_DIR			:= /usr/local/lib
+LIB_INSTALL_DIR			:= /usr/local/lib
+INCLUDE_INSTALL_DIR := /usr/local/include
 
-LIB_NAME			:= libcspec
-STATIC_LIBRARY		:= $(LIB_NAME).a
-SHARED_LIBRARY		:= $(LIB_NAME).so
+LIB_NAME						:= libcspec
+STATIC_LIBRARY			:= $(LIB_NAME).a
+SHARED_LIBRARY			:= $(LIB_NAME).so
 
-EXECUTABLE			:= spec
-EXE_STATIC			:= $(EXECUTABLE).static
-EXE_SHARED			:= $(EXECUTABLE).shared
+EXECUTABLE					:= spec
+EXE_STATIC					:= $(EXECUTABLE).static
+EXE_SHARED					:= $(EXECUTABLE).shared
 
-SRC_FILES			:= $(wildcard $(SRC)/*.cpp)
-OBJ_FILES			:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRC_FILES))
-DEP_FILES			:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.d, $(SRC_FILES))
+SRC_FILES						:= $(wildcard $(SRC)/*.cpp)
+OBJ_FILES						:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRC_FILES))
+DEP_FILES						:= $(patsubst $(SRC)/%.cpp, $(OBJ)/%.d, $(SRC_FILES))
 
-EXAMPLE_SRC_FILES	:= $(wildcard $(EXAMPLES)/*.cpp)
-EXAMPLE_OBJ_FILES 	:= $(patsubst $(EXAMPLES)/%.cpp, $(OBJ)/%.o, $(EXAMPLE_SRC_FILES))
+EXAMPLE_SRC_FILES		:= $(wildcard $(EXAMPLES)/*.cpp)
+EXAMPLE_OBJ_FILES		:= $(patsubst $(EXAMPLES)/%.cpp, $(OBJ)/%.o, $(EXAMPLE_SRC_FILES))
 EXAMPLE_DEP_FILES 	:= $(patsubst $(EXAMPLES)/%.cpp, $(OBJ)/%.d, $(EXAMPLE_SRC_FILES))
 
-OBJECTS				:= $(OBJ_FILES) $(EXAMPLE_OBJ_FILES)
-DEPENDENCIES		:= $(DEP_FILES) $(EXAMPLE_DEP_FILES)
+OBJECTS							:= $(OBJ_FILES) $(EXAMPLE_OBJ_FILES)
+DEPENDENCIES				:= $(DEP_FILES) $(EXAMPLE_DEP_FILES)
 
-LIB_DIRS			:= -L.
-SHARED_LIBS			:= -lcspec
-STATIC_LIBS			:= $(STATIC_LIBRARY)
+LIB_DIRS						:= -L.
+SHARED_LIBS					:= -lcspec
+STATIC_LIBS					:= $(STATIC_LIBRARY)
 
 ################
 ### Targets  ###
 ################
 
 .PHONY: all
-all: setup					\
-    $(STATIC_LIBRARY) 		\
+all: setup							\
+    $(STATIC_LIBRARY) 	\
     $(SHARED_LIBRARY)		\
 
 .PHONY: examples
@@ -57,7 +58,11 @@ setup: $(BIN) $(OBJ)
 
 .PHONY: install
 install: $(INSTALL_DIR) all
-	@SHARED_LIBRARY="$(SHARED_LIBRARY)" INSTALL_DIR="$(INSTALL_DIR)" /bin/bash install.sh
+	@SHARED_LIBRARY="$(SHARED_LIBRARY)" 					\
+	LIB_INSTALL_DIR="$(LIB_INSTALL_DIR)" 					\
+	INCLUDE="$(INCLUDE)"													\
+	INCLUDE_INSTALL_DIR="$(INCLUDE_INSTALL_DIR)" 	\
+	/bin/bash install.sh
 
 .PHONY: uninstall
 uninstall:

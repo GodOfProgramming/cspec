@@ -1,4 +1,4 @@
-#include "benchmark.hpp"
+#include "cspec/benchmark.hpp"
 
 #include <iostream>
 

@@ -1,4 +1,4 @@
-#include <cspec.hpp>
+#include <cspec/cspec.hpp>
 
 #include <algorithm>
 #include <array>

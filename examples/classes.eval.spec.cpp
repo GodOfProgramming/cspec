@@ -1,4 +1,4 @@
-#include "cspec.hpp"
+#include <cspec/cspec.hpp>
 #include "sstream"
 
 // Used to demo usage of regular classes without specialization

@@ -1,11 +1,11 @@
 #include <exception>
 #include <sstream>
-#include "cspec.hpp"
-#include "misc.hpp"
-#include "blocks.hpp"
-#include "exceptions.hpp"
-#include "expectation.hpp"
-#include "failable.hpp"
+#include "cspec/cspec.hpp"
+#include "cspec/misc.hpp"
+#include "cspec/blocks.hpp"
+#include "cspec/exceptions.hpp"
+#include "cspec/expectation.hpp"
+#include "cspec/failable.hpp"
 
 namespace
 {
