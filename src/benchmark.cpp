@@ -1,4 +1,4 @@
-#include "cspec/benchmark.hpp"
+#include "cspec/cspec.hpp"
 
 #include <iostream>
 
@@ -11,25 +11,24 @@ namespace
 
 namespace cspec
 {
-	std::unique_ptr<std::deque<Benchmark*>> Benchmark::sBenchmarks;
+	std::unique_ptr<std::deque<Benchmark*>> Benchmark::Benchmarks;
 
 	Benchmark::Benchmark(const char* name): Name(name)
 	{
 		if (!gBenchmarkInitalized) {
-			sBenchmarks = std::make_unique<std::deque<Benchmark*>>();
+			Benchmarks = std::make_unique<std::deque<Benchmark*>>();
 			gBenchmarkInitalized = true;
 		}
 
-		sBenchmarks->push_back(this);
+		Benchmarks->push_back(this);
 	}
 
 	void Benchmark::Run()
 	{
-		std::cout << "Running " << sBenchmarks->size() << " benchmarks\n";
-		for (auto benchmark : *sBenchmarks) {
+		std::cout << "Running " << Benchmarks->size() << " benchmarks\n";
+		for (auto benchmark : *Benchmarks) {
 			std::cout << "\n\n" << benchmark->Name << "\n\n";
 			benchmark->body();
 		}
 	}
 }  // namespace cspec
-

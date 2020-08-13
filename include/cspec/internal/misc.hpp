@@ -8,13 +8,13 @@ namespace cspec
     extern std::stringstream gFailureMessages;
 
     template <typename... Args>
-    void print(Args&&... args)
+    inline void print(Args&&... args)
     {
         ((std::cout << std::forward<Args>(args)), ...) << "\x1b[m";
     }
 
     template <typename... Args>
-    void capture(Args&&... args)
+    inline void capture(Args&&... args)
     {
         ((gFailureMessages << std::forward<Args>(args)), ...) << "\x1b[m";
     }

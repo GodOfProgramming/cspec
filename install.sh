@@ -1,24 +1,33 @@
-#!/bin/sh
+#!/bin/bash
 
-if [ "$EUID" == '0' ]; then			
-    echo "Installing shared lib into '$LIB_INSTALL_DIR'"	
-		if [ -d "$LIB_INSTALL_DIR" ]; then
-			install -D "$SHARED_LIBRARY" "$LIB_INSTALL_DIR/$SHARED_LIBRARY"
-		else
-			echo "The library installation '$LIB_INSTALL_DIR' directory does not exist"
-			exit 1
-		fi
+# $1 = shared_library
+# $2 = static_library
+# $3 = lib directory
+# $4 = include directory
 
-		echo "Installing headers into '$INCLUDE_INSTALL_DIR'"
-		if [ -d "$INCLUDE_INSTALL_DIR" ]; then
-			cp -r "$INCLUDE/cspec" "$INCLUDE_INSTALL_DIR"
-		else
-			echo "The header installation '$INCLUDE_INSTALL_DIR' directory does not exist"
-			exit 1
-		fi
-else
-    echo "You must have root access to install"
-		echo "Alternatively, change the install dir to something you own and remove this if check";
-		exit 1
+shared_lib="$1"
+static_lib="$2"
+lib_dir="$3"
+include_dir="$4"
+
+if [ ! "$EUID" = '0' ]; then
+  echo "You must have root access to install"
+  echo "Alternatively, change the install dir to something you own and remove this if check";
+  exit 1
 fi
 
+echo "Installing shared lib into '$lib_dir'"
+if [ ! -d "$lib_dir" ]; then
+  makedir -p "$lib_dir"
+fi
+
+install -D "bin/$shared_lib" "$lib_dir/$shared_lib"
+
+echo "Installing headers into '$include_dir'"
+if [ ! -d "$include_dir" ]; then
+  mkdir -p "$include_dir"
+fi
+
+cp -r "include/cspec" "$include_dir"
+
+ldconfig

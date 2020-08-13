@@ -37,59 +37,51 @@ EXAMPLE_DEP_FILES 	:= $(patsubst $(EXAMPLES)/%.cpp, $(OBJ)/%.d, $(EXAMPLE_SRC_FI
 OBJECTS							:= $(OBJ_FILES) $(EXAMPLE_OBJ_FILES)
 DEPENDENCIES				:= $(DEP_FILES) $(EXAMPLE_DEP_FILES)
 
-LIB_DIRS						:= -L.
-SHARED_LIBS					:= -lcspec
-STATIC_LIBS					:= $(STATIC_LIBRARY)
+LIB_DIRS						:= -L$(shell pwd)/bin
+
+PATH								:= .:$(PATH)
 
 ################
 ### Targets  ###
 ################
 
 .PHONY: all
-all: setup							\
-    $(STATIC_LIBRARY) 	\
-    $(SHARED_LIBRARY)		\
+all: $(BIN) $(OBJ) $(BIN)/$(STATIC_LIBRARY) $(BIN)/$(SHARED_LIBRARY)
 
 .PHONY: examples
 examples: all $(BIN)/$(EXE_STATIC) $(BIN)/$(EXE_SHARED)
 
-.PHONY: setup
-setup: $(BIN) $(OBJ)
-
 .PHONY: install
 install: $(INSTALL_DIR) all
-	@SHARED_LIBRARY="$(SHARED_LIBRARY)" 					\
-	LIB_INSTALL_DIR="$(LIB_INSTALL_DIR)" 					\
-	INCLUDE="$(INCLUDE)"													\
-	INCLUDE_INSTALL_DIR="$(INCLUDE_INSTALL_DIR)" 	\
-	/bin/bash install.sh
+	@install.sh $(SHARED_LIBRARY) $(STATIC_LIBRARY) $(LIB_INSTALL_DIR) $(INCLUDE_INSTALL_DIR)
 
 .PHONY: uninstall
 uninstall:
-	-@rm $(INSTALL_DIR)/$(SHARED_LIBRARY)
+	-@rm $(LIB_INSTALL_DIR)/$(SHARED_LIBRARY)
+	-@rm $(LIB_INSTALL_DIR)/$(STATIC_LIBRARY)
+	-@rm -rf $(INCLUDE_INSTALL_DIR)/cspec
 
 .PHONY: check
 check: test-static test-shared
 
 .PHONY: test-static
-test-static: $(BIN)/$(EXECUTABLE).static
-	@echo "Testing static..." && $< > /dev/null && echo "Passed!"
+test-static: $(BIN)/$(STATIC_LIBRARY) $(BIN)/$(EXE_STATIC)
+	@echo "Testing static..." && $(BIN)/$(EXE_STATIC) && echo "Passed!"
 
 .PHONY: test-shared
-test-shared: $(BIN)/$(EXECUTABLE).shared
-	@echo "Testing shared..." && $< > /dev/null && echo "Passed!"
+test-shared: $(BIN)/$(SHARED_LIBRARY) $(BIN)/$(EXE_SHARED)
+	@echo "Testing shared..." && LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$(shell pwd)/bin" $(BIN)/$(EXE_SHARED) && echo "Passed!"
 
 .PHONY: force
 force: clean all
 
 .PHONY: clean
 clean:
-	-@rm -f $(SHARED_LIBRARY) $(STATIC_LIBRARY) $(OBJECTS) $(DEPENDENCIES)
+	-@rm -f $(BIN)/$(SHARED_LIBRARY) $(BIN)/$(STATIC_LIBRARY) $(OBJECTS) $(DEPENDENCIES)
 
 .PHONY: ci
 ci: install
-	@make check LD_LIBRARY_PATH="$(LD_LIBRARY_PATH):$(INSTALL_DIR)"
-	@echo "Passed!"
+	@$(MAKE) check
 
 -include $(DEPENDENCIES)
 
@@ -100,28 +92,28 @@ ci: install
 $(OBJ)/%.o: $(SRC)/%.cpp
 	$(CXX) $(CXX_FLAGS) -c -fPIC -MMD -MP -I$(INCLUDE) $< -o $@
 
-$(OBJ)/%.spec.o: $(EXAMPLES)/%.spec.cpp
+$(OBJ)/%.o: $(EXAMPLES)/%.cpp
 	$(CXX) $(CXX_FLAGS) -c -MMD -MP -I$(INCLUDE) $< -o $@
 
 ######################
 ### Static Library ###
 ######################
 
-$(STATIC_LIBRARY): $(OBJ_FILES)
+$(BIN)/$(STATIC_LIBRARY): $(OBJ_FILES)
 	$(AR) $(AR_ARGS) $@ $^
 
 $(BIN)/$(EXE_STATIC): $(EXAMPLE_OBJ_FILES)
-	$(CXX) $(CXX_FLAGS) -o $@ -I$(INCLUDE) -I$(EXAMPLES) $(STATIC_LIBS) $^
+	$(CXX) $(CXX_FLAGS) -o $@ -I$(INCLUDE) -I$(EXAMPLES) $(LIB_DIRS) $^ -Wl,-Bstatic -lcspec -Wl,-Bdynamic
 
 ######################
 ### Shared Library ###
 ######################
 
-$(SHARED_LIBRARY): $(OBJ_FILES)
+$(BIN)/$(SHARED_LIBRARY): $(OBJ_FILES)
 	$(CXX) -shared -o $@ $^
 
 $(BIN)/$(EXE_SHARED): $(EXAMPLE_OBJ_FILES)
-	$(CXX) $(CXX_FLAGS) -o $@ -I$(INCLUDE) -I$(EXAMPLES) $(LIB_DIRS) $^ $(SHARED_LIBS)
+	$(CXX) $(CXX_FLAGS) -o $@ -I$(INCLUDE) -I$(EXAMPLES) $(LIB_DIRS) $^ -Wl,-Bdynamic -lcspec
 
 ###############
 ### Utility ###
@@ -135,4 +127,3 @@ $(OBJ):
 
 $(INSTALL_DIR):
 	-@mkdir -p $@
-
