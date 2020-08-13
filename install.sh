@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # $1 = shared_library
 # $2 = static_library

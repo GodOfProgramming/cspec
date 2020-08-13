@@ -37,7 +37,9 @@ EXAMPLE_DEP_FILES 	:= $(patsubst $(EXAMPLES)/%.cpp, $(OBJ)/%.d, $(EXAMPLE_SRC_FI
 OBJECTS							:= $(OBJ_FILES) $(EXAMPLE_OBJ_FILES)
 DEPENDENCIES				:= $(DEP_FILES) $(EXAMPLE_DEP_FILES)
 
-LIB_DIRS						:= -L./bin
+LIB_DIRS						:= -L$(shell pwd)/bin
+
+PATH								:= .:$(PATH)
 
 ################
 ### Targets  ###
@@ -63,19 +65,19 @@ uninstall:
 check: test-static test-shared
 
 .PHONY: test-static
-test-static: $(BIN)/$(EXE_STATIC)
-	@echo "Testing static..." && $< && echo "Passed!"
+test-static: $(BIN)/$(STATIC_LIBRARY) $(BIN)/$(EXE_STATIC)
+	@echo "Testing static..." && $(BIN)/$(EXE_STATIC) && echo "Passed!"
 
 .PHONY: test-shared
-test-shared: $(BIN)/$(EXE_SHARED)
-	@echo "Testing shared..." && $< && echo "Passed!"
+test-shared: $(BIN)/$(SHARED_LIBRARY) $(BIN)/$(EXE_SHARED)
+	@echo "Testing shared..." && LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$(shell pwd)/bin" $(BIN)/$(EXE_SHARED) && echo "Passed!"
 
 .PHONY: force
 force: clean all
 
 .PHONY: clean
 clean:
-	-@rm -f $(SHARED_LIBRARY) $(STATIC_LIBRARY) $(OBJECTS) $(DEPENDENCIES)
+	-@rm -f $(BIN)/$(SHARED_LIBRARY) $(BIN)/$(STATIC_LIBRARY) $(OBJECTS) $(DEPENDENCIES)
 
 .PHONY: ci
 ci: install
